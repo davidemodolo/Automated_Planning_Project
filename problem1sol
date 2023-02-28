@@ -1,0 +1,43 @@
+(define (problem emergency-services-1)
+  (:domain emergency-services)
+
+  ; Objects
+  (:objects
+    agent - agent
+    person1 person2 person3 - person
+    box1 box2 box3 - box
+    food medicine tool - content
+    depot - location
+  )
+
+  ; Initial state
+  (:init
+    ; Locations
+    (at box1 depot)
+    (at box2 depot)
+    (at box3 depot)
+    (at agent depot)
+    (at food depot)
+    (at medicine depot)
+    (at tool depot)
+
+    ; Box contents
+    (empty box1)
+    (empty box2)
+    (empty box3)
+
+    ; People
+    (has-content person1 food-false medicine-false tool-false)
+    (has-content person2 food-false medicine-false tool-false)
+    (has-content person3 food-false medicine-false tool-false)
+  )
+
+  ; Goal state
+  (:goal
+    (and
+      (has-content person1 food-true)
+      (has-content person2 medicine-true)
+      (has-content person3 tool-true)
+    )
+  )
+)
