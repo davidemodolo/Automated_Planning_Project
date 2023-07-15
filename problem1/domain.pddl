@@ -17,14 +17,15 @@
 
     (:requirements :strips :typing :equality :negative-preconditions)
     (:types
-        box supply - object
-        person robotic_agent location empty food medicine tools - supply
+        box supply person robotic_agent location - object
+        empty food medicine tools - supply
     )
 
     (:predicates
         (location_box ?x - box ?l - location)
         (location_person ?p - person ?l - location)
         (location_robot ?r - robotic_agent ?l - location)
+        (location_supply ?s - supply ?l - location)
         (is_empty_box ?b - box)
         (content ?b - box ?s - supply)
         (has ?p - person ?b - box)
@@ -40,21 +41,21 @@
     )
 
     (:action load
-        :parameters (?r - robotic_agent ?b - box ?l - location)
-        :precondition (and (location_robot ?r ?l) (location_box ?b ?l) (is_empty_box ?b))
-        :effect (and (not (location_box ?b ?l)) (not (is_empty_box ?b)) (loaded ?r ?b))
+        :parameters (?r - robotic_agent ?b - box ?l - location ?s - supply)
+        :precondition (and (location_robot ?r ?l) (location_box ?b ?l) (location_supply ?s ?l) (is_empty_box ?b) (content ?b ?s))
+        :effect (and (not (is_empty_box ?b)) (not (content ?b ?s)) (loaded ?r ?b))
     )
 
     (:action unload
-        :parameters (?r - robotic_agent ?b - box ?l - location)
-        :precondition (and (location_robot ?r ?l) (loaded ?r ?b))
-        :effect (and (not (loaded ?r ?b)) (location_box ?b ?l) (is_empty_box ?b))
+        :parameters (?r - robotic_agent ?b - box ?l - location ?s - supply)
+        :precondition (and (location_robot ?r ?l) (loaded ?r ?b) (location_supply ?s ?l) (not (content ?b ?s)))
+        :effect (and (not (loaded ?r ?b)) (content ?b ?s))
     )
 
     (:action fill
-        :parameters (?b - box ?l - location ?s - supply)
-        :precondition (and (location_box ?b ?l) (is_empty_box ?b) (content ?b ?s))
-        :effect (and (not (is_empty_box ?b)) (not (content ?b ?s)))
+        :parameters (?r - robotic_agent ?b - box ?l - location ?s - supply)
+        :precondition (and (location_robot ?r ?l) (location_box ?b ?l) (location_supply ?s ?l) (is_empty_box ?b) (not (content ?b ?s)))
+        :effect (and (not (is_empty_box ?b)) (not (content ?b ?s)) (content ?b ?s))
     )
 
     (:action deliver
