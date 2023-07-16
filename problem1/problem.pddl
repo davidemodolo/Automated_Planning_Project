@@ -35,7 +35,7 @@
         (and
             (or (and (delivered person1 food1) (delivered person2 food2)) (and (delivered person1 food2) (delivered person2 food1)))
             ; (delivered person2 medicine1)
-            (delivered person3 tools1)
+            (delivered person2 tools1)
             (box_is_empty box1)
             (box_is_empty box2)
             (location_box box1 location0)
