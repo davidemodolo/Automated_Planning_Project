@@ -14,7 +14,7 @@
 ; move to another location
 
 (define (domain problem1)
-    (:requirements :strips :typing :equality :negative-preconditions)
+    (:requirements :strips :typing :equality :negative-preconditions :disjunctive-preconditions)
     (:types
         person robotic_agent location box - object
         ; declare the types of the supplies
