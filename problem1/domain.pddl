@@ -16,7 +16,8 @@
 (define (domain problem1)
     (:requirements :strips :typing :equality :negative-preconditions)
     (:types
-        person robotic_agent location - object
+        person robotic_agent location box - object
+        ; declare the types of the supplies
         supply - object
         food medicine tools - supply
     )
@@ -24,36 +25,50 @@
     (:predicates
         (location_person ?p - person ?l - location)
         (location_robot ?r - robotic_agent ?l - location)
+        (location_box ?b - box ?l - location)
         (location_supply ?s - supply ?l - location)
-        (robot_has_supply ?r - robotic_agent ?s - supply)
+        (robot_has_box ?r - robotic_agent ?b - box)
+        (robot_has_no_box ?r - robotic_agent)
+        (box_with_supply ?b - box ?s - supply)
+        (box_is_empty ?b - box) 
         (delivered ?p - person ?s - supply)
     )
-    
+
     (:action move_robot
         :parameters (?r - robotic_agent ?l1 - location ?l2 - location)
         :precondition (and (location_robot ?r ?l1) (not (= ?l1 ?l2)))
         :effect (and (not (location_robot ?r ?l1)) (location_robot ?r ?l2))
     )
 
-    (:action load
-        :parameters (?r - robotic_agent ?l - location ?s - supply)
-        ; this gives the robot the supply if it is in the same location as the supply
-        :precondition (and (location_robot ?r ?l) (location_supply ?s ?l))
-        :effect (and (not (location_supply ?s ?l)) (robot_has_supply ?r ?s))
+    (:action take_box
+        :parameters (?r - robotic_agent ?l1 - location ?b - box)
+        :precondition (and (location_robot ?r ?l1) (location_box ?b ?l1) (not (robot_has_box ?r ?b)) (robot_has_no_box ?r))
+        :effect (and (not (location_box ?b ?l1)) (robot_has_box ?r ?b) (not (robot_has_no_box ?r)))
     )
 
-    (:action unload
-        :parameters (?r - robotic_agent ?s - supply ?l - location)
-        :precondition (and (robot_has_supply ?r ?s) (location_robot ?r ?l))
-        :effect (and (not (robot_has_supply ?r ?s)) (location_supply ?s ?l))
+    (:action drop_box
+        :parameters (?r - robotic_agent ?l1 - location ?b - box)
+        :precondition (and (location_robot ?r ?l1) (robot_has_box ?r ?b) (not(robot_has_no_box ?r)))
+        :effect (and (not (robot_has_box ?r ?b)) (location_box ?b ?l1) (robot_has_no_box ?r))
+    )
+
+    (:action fill_box
+        :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply)
+        :precondition (and (location_robot ?r ?l1) (robot_has_box ?r ?b) (location_supply ?s ?l1) (box_is_empty ?b))
+        :effect (and (not (location_supply ?s ?l1)) (box_with_supply ?b ?s) (not (box_is_empty ?b)))
+    )
+
+    (:action empty_box
+        :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply)
+        :precondition (and (location_robot ?r ?l1) (robot_has_box ?r ?b) (box_with_supply ?b ?s) (not (box_is_empty ?b)))
+        :effect (and (not (box_with_supply ?b ?s)) (location_supply ?s ?l1) (box_is_empty ?b))
+
     )
 
     (:action deliver
-        :parameters (?r - robotic_agent ?p - person ?s - supply ?l - location)
-        ; if the robot is in the same location as the person, it can deliver the supply
-        :precondition (and (robot_has_supply ?r ?s) (location_robot ?r ?l) (location_person ?p ?l))
-        :effect (and (not (robot_has_supply ?r ?s)) (delivered ?p ?s) (location_supply ?s ?l))
+        :parameters (?r - robotic_agent ?l1 - location ?p - person ?s - supply ?b - box)
+        :precondition (and (location_robot ?r ?l1) (location_person ?p ?l1) (robot_has_box ?r ?b) (box_with_supply ?b ?s) (not (box_is_empty ?b)))
+        :effect (and (not (robot_has_box ?r ?b)) (not (box_with_supply ?b ?s)) (delivered ?p ?s) (location_box ?b ?l1) (box_is_empty ?b) (robot_has_no_box ?r))
     )
+
 )
-
-
