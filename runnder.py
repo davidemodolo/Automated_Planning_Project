@@ -8,8 +8,9 @@ def resolveWithAPI(domain, problem):
         # return '\n'.join([act['name'] for act in resp['result']['plan']])
         return '\n'.join([act for act in resp['result']['plan']])
 
-domain = "problem2/domain.pddl"
-problem = "problem2/problem.pddl"
+prob = "2"
+domain = f"problem{prob}/domain.pddl"
+problem = f"problem{prob}/problem.pddl"
 
 domain = open(domain, 'r').read()
 problem = open(problem, 'r').read()
