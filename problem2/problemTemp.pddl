@@ -21,8 +21,10 @@
     
     (:goal
         (and
-            (box_on_carrier box1 carrier1)
-            (box_on_carrier box2 carrier1)
+            (location_box box1 location1)
+            (not(box_loaded box1))
+            ;(location_box box2 location1)
+            (location_carrier carrier1 location0)
             (carrier_has_no_robot carrier1)
         )
     )
