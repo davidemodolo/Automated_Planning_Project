@@ -1,4 +1,4 @@
-(define (domain problem2T)
+(define (domain problem2)
     (:requirements :strips :typing :equality :negative-preconditions :disjunctive-preconditions :conditional-effects :existential-preconditions :universal-preconditions) ; :numeric-fluents
     (:types
         person robotic_agent location box carrier supply - object
