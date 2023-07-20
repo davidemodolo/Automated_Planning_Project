@@ -15,8 +15,8 @@ def resolveWithAPI(domain, problem):
                  return resp['result']['error']
 
 prob = "2"
-domain = f"problem{prob}/domainTemp.pddl"
-problem = f"problem{prob}/problemTemp.pddl"
+domain = f"problem{prob}/domain.pddl"
+problem = f"problem{prob}/problem.pddl"
 
 domain = open(domain, 'r').read()
 problem = open(problem, 'r').read()

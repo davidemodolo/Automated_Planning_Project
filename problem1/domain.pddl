@@ -58,11 +58,10 @@
         :effect (and (not (location_supply ?s ?l1)) (box_with_supply ?b ?s) (not (box_is_empty ?b)))
     )
 
-    (:action empty_box
+    (:action empty_box ; not used action, here in the case we want to empty a box that is somehow filled with a supply we don't need to deliver
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply)
         :precondition (and (location_robot ?r ?l1) (robot_has_box ?r ?b) (box_with_supply ?b ?s) (not (box_is_empty ?b)))
         :effect (and (not (box_with_supply ?b ?s)) (location_supply ?s ?l1) (box_is_empty ?b))
-
     )
 
     (:action deliver
