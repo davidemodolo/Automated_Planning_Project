@@ -1,5 +1,5 @@
 (define (domain problem2)
-    (:requirements :strips :typing :equality :negative-preconditions :disjunctive-preconditions :conditional-effects :existential-preconditions :universal-preconditions) ; :numeric-fluents
+    (:requirements :strips :typing :equality :negative-preconditions :disjunctive-preconditions :conditional-effects :existential-preconditions :universal-preconditions)
     (:types
         person robotic_agent location box carrier supply - object
         food medicine tools - supply
