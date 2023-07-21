@@ -32,7 +32,6 @@
         (box_is_empty box2)
         (box_is_empty box3)
         (box_is_empty box4)
-        (= (num-boxes carrier1) 0)
         ; closed world assumptions
     )
     
