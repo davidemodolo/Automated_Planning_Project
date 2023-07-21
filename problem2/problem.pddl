@@ -25,7 +25,7 @@
         (location_supply food1 location0)
         (location_supply food2 location0)
         (location_supply tools1 location0)
-        (location_carrier carrier1 location1)
+        (location_carrier carrier1 location0)
         (carrier_has_no_robot carrier1)
         (robot_has_no_carrier robot1)
         (box_is_empty box1)

@@ -15,10 +15,10 @@ def resolveWithAPI(domain, problem):
                  return resp['result']['error']
 
 prob = "2"
-domain = f"problem{prob}NumericFluents/domain.pddl"
-problem = f"problem{prob}NumericFluents/problem.pddl"
+domain = f"problem{prob}NF/domain.pddl"
+problem = f"problem{prob}NF/problem.pddl"
 
 domain = open(domain, 'r').read()
 problem = open(problem, 'r').read()
-
-print(resolveWithAPI(domain, problem))
+steps = resolveWithAPI(domain, problem)
+print(steps)
