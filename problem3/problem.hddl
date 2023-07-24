@@ -18,8 +18,7 @@
             ; (task0 (T_deliver_1_supp per2 food1 ))
             ; (task1 (T_deliver_2_supp per1 med1 tools1))
             (task0
-                (T_move_robot robot1 location0 location1))
-        )
+                (T_deliver_supply robot1 location1 per1 med1 box1)))
     )
 
     (:init
