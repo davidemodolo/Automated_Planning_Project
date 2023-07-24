@@ -1,0 +1,41 @@
+(define (problem basic_delivery_problem)
+  (:domain problem2)
+
+  ; Objects
+  (:objects
+    r - robotic_agent
+    c - carrier
+    b1 b2 b3 b4 - box
+    s1 s2 s3 - supply
+    l0 l1 - location
+    p - person
+  )
+
+  ; Initial State
+  (:init
+    ; Locations
+    (location_robot r l0)
+    (location_carrier c l0)
+    (location_box b1 l0)
+    (location_box b2 l0)
+    (location_box b3 l0)
+    (location_box b4 l0)
+    (location_supply s1 l0)
+    (location_supply s2 l0)
+    (location_supply s3 l0)
+    (location_person p l1)
+
+    ; Carrier and Robot initial state
+    (carrier_has_no_robot c)
+    (robot_has_no_carrier r)
+    (box_is_empty b1)
+    (box_is_empty b2)
+    (box_is_empty b3)
+    (box_is_empty b4)
+  )
+
+  ; Goal State
+  (:goal
+    (delivered p s1)
+  )
+)
