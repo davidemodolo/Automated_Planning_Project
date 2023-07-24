@@ -30,7 +30,7 @@
     )
 
     (:task T_deliver_supply
-        :parameters (?p - person ?s - supply)
+        :parameters (?r - robotic_agent ?l1 - location ?p - person ?s - supply ?b - box)
         :precondition ()
         :effect ()
     )
@@ -107,27 +107,24 @@
         (T_deliver_1_supp ?p ?s)
         :subtasks(and
             (task0
-                (T_attach_carrier_to_robot ?r ?l1 ?c))
+                (T_fill_box_with_supply ?r ?l1 ?b ?s))
             (task1
                 (T_load_box_on_carrier ?c ?b ?l1 ?r))
             (task2
-                (T_fill_box_with_supply ?r ?l1 ?b ?s))
-            (task3
                 (T_move_robot_with_carrier ?r ?c ?l1 ?l2))
-            (task4
+            (task3
                 (T_unload_box_from_carrier ?c ?b ?l2 ?r))
-            (task5
-                (T_empty_box_from_supply ?r ?l2 ?b ?s))
-            (task6
-                (T_deliver_supply ?p ?s))
+            ; (task4
+            ;     (T_empty_box_from_supply ?r ?l2 ?b ?s))
+            (task4
+                (T_deliver_supply ?r ?l2 ?p ?s ?b))
         )
         :ordering(and
             (task0 < task1)
             (task1 < task2)
             (task2 < task3)
             (task3 < task4)
-            (task4 < task5)
-            (task5 < task6)
+            ;(task4 < task5)
         )
 
     )
@@ -138,28 +135,26 @@
         (T_deliver_2_supp ?p ?s1 ?s2) ; since this does not work (and (deliver_supply ?p ?s1) (deliver_supply ?p ?s2))
         :subtasks(and
             (task0
-                (T_attach_carrier_to_robot ?r ?l1 ?c))
-            (task1
                 (T_fill_box_with_supply ?r ?l1 ?b1 ?s1))
-            (task2
+            (task1
                 (T_load_box_on_carrier ?c ?b2 ?l1 ?r))
-            (task3
+            (task2
                 (T_fill_box_with_supply ?r ?l1 ?b2 ?s2))
-            (task4
+            (task3
                 (T_load_box_on_carrier ?c ?b1 ?l1 ?r))
-            (task5
+            (task4
                 (T_move_robot_with_carrier ?r ?c ?l1 ?l2))
-            (task6
+            (task5
                 (T_unload_box_from_carrier ?c ?b1 ?l2 ?r))
-            (task7
+            (task6
                 (T_empty_box_from_supply ?r ?l2 ?b1 ?s1))
-            (task8
+            (task7
                 (T_unload_box_from_carrier ?c ?b2 ?l2 ?r))
-            (task9
+            (task8
                 (T_empty_box_from_supply ?r ?l2 ?b2 ?s2))
-            (task10
+            (task9
                 (T_deliver_supply ?p ?s1))
-            (task11
+            (task10
                 (T_deliver_supply ?p ?s2))
         )
         :ordering(and
@@ -173,48 +168,45 @@
             (task7 < task8)
             (task8 < task9)
             (task9 < task10)
-            (task10 < task11)
         )
     )
 
     (:method M_deliver_3_supplies
-        :parameters(?r - robotic_agent ?l1 - location ?l2 - location ?p - person ?s1 - supply ?s2 - supply ?s3 - supply ?b1 - box ?b2 - box ?c - carrier)
+        :parameters(?r - robotic_agent ?l1 - location ?l2 - location ?p - person ?s1 - supply ?s2 - supply ?s3 - supply ?b1 - box ?b2 - box ?b3 - box ?c - carrier)
         :task
         (T_deliver_3_supp ?p ?s1 ?s2 ?s3) ; since this does not work (and (deliver_supply ?p ?s1) (deliver_supply ?p ?s2))
         :subtasks(and
             (task0
-                (T_attach_carrier_to_robot ?r ?l1 ?c))
-            (task1
                 (T_fill_box_with_supply ?r ?l1 ?b1 ?s1))
+            (task1
+                (T_load_box_on_carrier ?c ?b2 ?l1 ?r))
             (task2
-                (T_load_box_on_carrier ?c ?b2 ?l1 ?r))
-            (task3
                 (T_fill_box_with_supply ?r ?l1 ?b2 ?s2))
-            (task4
+            (task3
                 (T_load_box_on_carrier ?c ?b1 ?l1 ?r))
+            (task4
+                (T_fill_box_with_supply ?r ?l1 ?b3 ?s3))
             (task5
-                (T_fill_box_with_supply ?r ?l1 ?b1 ?s3))
-            (task6
                 (T_load_box_on_carrier ?c ?b2 ?l1 ?r))
-            (task7
+            (task6
                 (T_move_robot_with_carrier ?r ?c ?l1 ?l2))
+            (task7
+                (T_unload_box_from_carrier ?c ?b1 ?l2 ?r))
             (task8
-                (T_unload_box_from_carrier ?c ?b1 ?l2 ?r))
-            (task9
                 (T_empty_box_from_supply ?r ?l2 ?b1 ?s1))
-            (task10
+            (task9
                 (T_unload_box_from_carrier ?c ?b2 ?l2 ?r))
-            (task11
+            (task10
                 (T_empty_box_from_supply ?r ?l2 ?b2 ?s2))
+            (task11
+                (T_unload_box_from_carrier ?c ?b3 ?l2 ?r))
             (task12
-                (T_unload_box_from_carrier ?c ?b1 ?l2 ?r))
+                (T_empty_box_from_supply ?r ?l2 ?b3 ?s3))
             (task13
-                (T_empty_box_from_supply ?r ?l2 ?b1 ?s3))
-            (task14
                 (T_deliver_supply ?p ?s1))
-            (task15
+            (task14
                 (T_deliver_supply ?p ?s2))
-            (task16
+            (task15
                 (T_deliver_supply ?p ?s3))
         )
         :ordering(and
@@ -233,7 +225,6 @@
             (task12 < task13)
             (task13 < task14)
             (task14 < task15)
-            (task15 < task16)
         )
     )
 
@@ -418,12 +409,12 @@
     )
 
     (:method M_deliver_supply
-        :parameters (?p - person ?s - supply)
+        :parameters (?r - robotic_agent ?l1 - location ?p - person ?s - supply ?b - box)
         :task
-        (T_deliver_supply ?p ?s)
+        (T_deliver_supply ?r ?l1 ?p ?s ?b)
         :subtasks(and
             (task0
-                (deliver ?p ?s))
+                (deliver ?r ?l1 ?p ?s ?b))
         )
     )
 

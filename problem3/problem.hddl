@@ -12,12 +12,15 @@
         per1 per2 per3 - person
     )
     (:htn
-  		:parameters ()
-		:subtasks (and
-            (task0 (T_deliver_1_supp per2 food1 ))
-            (task1 (T_deliver_2_supp per1 med1 tools1))
-		)
-  )
+        :parameters ()
+        :subtasks
+        (and
+            ; (task0 (T_deliver_1_supp per2 food1 ))
+            ; (task1 (T_deliver_2_supp per1 med1 tools1))
+            (task0
+                (T_move_robot robot1 location0 location1))
+        )
+    )
 
     (:init
         (location_robot robot1 location0)
@@ -41,6 +44,5 @@
         (box_is_empty box4)
         ; closed world assumptions
     )
-    
-    
+
 )
