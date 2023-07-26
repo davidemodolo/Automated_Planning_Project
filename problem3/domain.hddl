@@ -54,49 +54,49 @@
     )
 
     (:task T_move_robot
-        :parameters (?r - robotic_agent ?l1 - location ?l2 - location)
+        :parameters (?r - robotic_agent ?l2 - location)
         :precondition ()
         :effect ()
     )
 
     (:task T_move_robot_with_carrier
-        :parameters (?r - robotic_agent ?c -carrier ?l1 - location ?l2 - location)
+        :parameters (?r - robotic_agent ?c -carrier ?l2 - location)
         :precondition ()
         :effect ()
     )
 
     (:task T_attach_carrier_to_robot
-        :parameters (?r - robotic_agent ?l1 - location ?c - carrier)
+        :parameters (?r - robotic_agent ?c - carrier)
         :precondition ()
         :effect ()
     )
 
     (:task T_detatch_carrier_from_robot
-        :parameters (?r - robotic_agent ?l1 - location ?c - carrier)
+        :parameters (?r - robotic_agent ?c - carrier)
         :precondition ()
         :effect ()
     )
 
     (:task T_load_box_on_carrier
-        :parameters (?c - carrier ?b - box ?l - location ?r - robotic_agent)
+        :parameters (?c - carrier ?b - box )
         :precondition ()
         :effect ()
     )
 
     (:task T_unload_box_from_carrier
-        :parameters (?c - carrier ?b - box ?l - location ?r - robotic_agent)
+        :parameters (?c - carrier ?b - box)
         :precondition ()
         :effect ()
     )
 
     (:task T_fill_box_with_supply
-        :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply)
+        :parameters (?b - box ?s - supply)
         :precondition ()
         :effect ()
     )
 
     (:task T_empty_box_from_supply
-        :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply)
+        :parameters (?b - box ?s - supply)
         :precondition ()
         :effect ()
     )
@@ -107,16 +107,17 @@
         (T_deliver_1_supp ?p ?s)
         :subtasks(and
             (task0
-                (T_fill_box_with_supply ?r ?l1 ?b ?s))
+                (T_fill_box_with_supply ?b ?s))
             (task1
-                (T_load_box_on_carrier ?c ?b ?l1 ?r))
+                (T_load_box_on_carrier ?c ?b))
             (task2
-                (T_move_robot_with_carrier ?r ?c ?l1 ?l2))
+                (T_move_robot_with_carrier ?r ?c ?l2))
             (task3
-                (T_unload_box_from_carrier ?c ?b ?l2 ?r))
+                (T_unload_box_from_carrier ?c ?b))
             ; (task4
             ;     (T_empty_box_from_supply ?r ?l2 ?b ?s))
             (task4
+            ; (?r - robotic_agent ?l1 - location ?p - person ?s - supply ?b - box)
                 (T_deliver_supply ?r ?l2 ?p ?s ?b))
         )
         :ordering(and
@@ -124,7 +125,6 @@
             (task1 < task2)
             (task2 < task3)
             (task3 < task4)
-            ;(task4 < task5)
         )
 
     )
@@ -135,25 +135,25 @@
         (T_deliver_2_supp ?p ?s1 ?s2) ; since this does not work (and (deliver_supply ?p ?s1) (deliver_supply ?p ?s2))
         :subtasks(and
             (task0
-                (T_fill_box_with_supply ?r ?l1 ?b1 ?s1))
+                (T_fill_box_with_supply ?b1 ?s1))
             (task1
-                (T_load_box_on_carrier ?c ?b2 ?l1 ?r))
+                (T_load_box_on_carrier ?c ?b2))
             (task2
-                (T_fill_box_with_supply ?r ?l1 ?b2 ?s2))
+                (T_fill_box_with_supply ?b2 ?s2))
             (task3
-                (T_load_box_on_carrier ?c ?b1 ?l1 ?r))
+                (T_load_box_on_carrier ?c ?b1))
             (task4
-                (T_move_robot_with_carrier ?r ?c ?l1 ?l2))
+                (T_move_robot_with_carrier ?r ?c ?l2))
             (task5
-                (T_unload_box_from_carrier ?c ?b1 ?l2 ?r))
+                (T_unload_box_from_carrier ?c ?b1))
             (task6
-                (T_empty_box_from_supply ?r ?l2 ?b1 ?s1))
+                (T_empty_box_from_supply ?b1 ?s1))
             (task7
-                (T_unload_box_from_carrier ?c ?b2 ?l2 ?r))
+                (T_unload_box_from_carrier ?c ?b2))
             (task8
-                (T_empty_box_from_supply ?r ?l2 ?b2 ?s2))
+                (T_empty_box_from_supply ?b2 ?s2))
             (task9
-                (T_deliver_supply ?p ?s1))
+                (T_deliver_supply ?p ?s1 ))
             (task10
                 (T_deliver_supply ?p ?s2))
         )
@@ -177,31 +177,31 @@
         (T_deliver_3_supp ?p ?s1 ?s2 ?s3) ; since this does not work (and (deliver_supply ?p ?s1) (deliver_supply ?p ?s2))
         :subtasks(and
             (task0
-                (T_fill_box_with_supply ?r ?l1 ?b1 ?s1))
+                (T_fill_box_with_supply ?b1 ?s1))
             (task1
-                (T_load_box_on_carrier ?c ?b2 ?l1 ?r))
+                (T_load_box_on_carrier ?c ?b2))
             (task2
-                (T_fill_box_with_supply ?r ?l1 ?b2 ?s2))
+                (T_fill_box_with_supply ?b2 ?s2))
             (task3
-                (T_load_box_on_carrier ?c ?b1 ?l1 ?r))
+                (T_load_box_on_carrier ?c ?b1))
             (task4
-                (T_fill_box_with_supply ?r ?l1 ?b3 ?s3))
+                (T_fill_box_with_supply ?b3 ?s3))
             (task5
-                (T_load_box_on_carrier ?c ?b2 ?l1 ?r))
+                (T_load_box_on_carrier ?c ?b2))
             (task6
-                (T_move_robot_with_carrier ?r ?c ?l1 ?l2))
+                (T_move_robot_with_carrier ?r ?c ?l2))
             (task7
-                (T_unload_box_from_carrier ?c ?b1 ?l2 ?r))
+                (T_unload_box_from_carrier ?c ?b1))
             (task8
-                (T_empty_box_from_supply ?r ?l2 ?b1 ?s1))
+                (T_empty_box_from_supply ?b1 ?s1))
             (task9
-                (T_unload_box_from_carrier ?c ?b2 ?l2 ?r))
+                (T_unload_box_from_carrier ?c ?b2))
             (task10
-                (T_empty_box_from_supply ?r ?l2 ?b2 ?s2))
+                (T_empty_box_from_supply ?b2 ?s2))
             (task11
-                (T_unload_box_from_carrier ?c ?b3 ?l2 ?r))
+                (T_unload_box_from_carrier ?c ?b3))
             (task12
-                (T_empty_box_from_supply ?r ?l2 ?b3 ?s3))
+                (T_empty_box_from_supply ?b3 ?s3))
             (task13
                 (T_deliver_supply ?p ?s1))
             (task14
@@ -231,7 +231,7 @@
     (:method M_move_robot
         :parameters (?r - robotic_agent ?l1 - location ?l2 - location)
         :task
-        (T_move_robot ?r ?l1 ?l2)
+        (T_move_robot ?r ?l2)
         :subtasks(and
             (task0
                 (move_robot ?r ?l1 ?l2))
@@ -241,7 +241,7 @@
     (:method M_move_robot_with_carrier_no_box
         :parameters (?r - robotic_agent ?l1 - location ?l2 - location ?c - carrier)
         :task
-        (T_move_robot_with_carrier ?r ?l1 ?l2)
+        (T_move_robot_with_carrier ?r ?c ?l2)
         :subtasks(and
             (task0
                 (move_robot_with_carrier_no_box ?r ?l1 ?l2 ?c))
@@ -251,7 +251,7 @@
     (:method M_move_robot_with_carrier_1_box
         :parameters (?r - robotic_agent ?l1 - location ?l2 - location ?c - carrier ?b - box)
         :task
-        (T_move_robot_with_carrier ?r ?l1 ?l2)
+        (T_move_robot_with_carrier ?r ?c ?l2)
         :subtasks(and
             (task0
                 (move_robot_with_carrier_box1 ?r ?l1 ?l2 ?c ?b))
@@ -261,7 +261,7 @@
     (:method M_move_robot_with_carrier_12_box
         :parameters (?r - robotic_agent ?l1 - location ?l2 - location ?c - carrier ?b1 - box ?b2 - box)
         :task
-        (T_move_robot_with_carrier ?r ?l1 ?l2)
+        (T_move_robot_with_carrier ?r ?c ?l2)
         :subtasks(and
             (task0
                 (move_robot_with_carrier_box12 ?r ?l1 ?l2 ?c ?b1 ?b2))
@@ -271,7 +271,7 @@
     (:method M_move_robot_with_carrier_123_box
         :parameters (?r - robotic_agent ?l1 - location ?l2 - location ?c - carrier ?b1 - box ?b2 - box ?b3 - box)
         :task
-        (T_move_robot_with_carrier ?r ?l1 ?l2)
+        (T_move_robot_with_carrier ?r ?c ?l2)
         :subtasks(and
             (task0
                 (move_robot_with_carrier_box123 ?r ?l1 ?l2 ?c ?b1 ?b2 ?b3))
@@ -281,7 +281,7 @@
     (:method M_move_robot_with_carrier_1234_box
         :parameters (?r - robotic_agent ?l1 - location ?l2 - location ?c - carrier ?b1 - box ?b2 - box ?b3 - box ?b4 - box)
         :task
-        (T_move_robot_with_carrier ?r ?l1 ?l2)
+        (T_move_robot_with_carrier ?r ?c ?l2)
         :subtasks(and
             (task0
                 (move_robot_with_carrier_box1234 ?r ?l1 ?l2 ?c ?b1 ?b2 ?b3 ?b4))
@@ -291,7 +291,7 @@
     (:method M_attach_carrier_to_robot
         :parameters (?r - robotic_agent ?l1 - location ?c - carrier)
         :task
-        (T_attach_carrier_to_robot ?r ?l1 ?c)
+        (T_attach_carrier_to_robot ?r ?c)
         :subtasks(and
             (task0
                 (attach_carrier_to_robot ?r ?l1 ?c))
@@ -301,7 +301,7 @@
     (:method M_detatch_carrier_from_robot
         :parameters (?r - robotic_agent ?l1 - location ?c - carrier)
         :task
-        (T_detatch_carrier_from_robot ?r ?l1 ?c)
+        (T_detatch_carrier_from_robot ?r ?c)
         :subtasks(and
             (task0
                 (detatch_carrier_from_robot ?r ?l1 ?c))
@@ -311,7 +311,7 @@
     (:method M_load_box_on_carrier_1
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply ?c - carrier)
         :task
-        (T_load_box_on_carrier ?c ?b ?l1 ?r)
+        (T_load_box_on_carrier ?c ?b)
         :subtasks(and
             (task0
                 (load_box1_on_carrier ?c ?b ?l1 ?r))
@@ -321,7 +321,7 @@
     (:method M_load_box_on_carrier_2
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply ?c - carrier)
         :task
-        (T_load_box_on_carrier ?c ?b ?l1 ?r)
+        (T_load_box_on_carrier ?c ?b)
         :subtasks(and
             (task0
                 (load_box2_on_carrier ?c ?b ?l1 ?r))
@@ -331,7 +331,7 @@
     (:method M_load_box_on_carrier_3
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply ?c - carrier)
         :task
-        (T_load_box_on_carrier ?c ?b ?l1 ?r)
+        (T_load_box_on_carrier ?c ?b)
         :subtasks(and
             (task0
                 (load_box3_on_carrier ?c ?b ?l1 ?r))
@@ -341,7 +341,7 @@
     (:method M_load_box_on_carrier_4
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply ?c - carrier)
         :task
-        (T_load_box_on_carrier ?c ?b ?l1 ?r)
+        (T_load_box_on_carrier ?c ?b)
         :subtasks(and
             (task0
                 (load_box4_on_carrier ?c ?b ?l1 ?r))
@@ -351,7 +351,7 @@
     (:method M_unload_box_from_carrier_1
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply ?c - carrier)
         :task
-        (T_unload_box_from_carrier ?c ?b ?l1 ?r)
+        (T_unload_box_from_carrier ?c ?b)
         :subtasks(and
             (task0
                 (unload_box1_from_carrier ?c ?b ?l1 ?r))
@@ -361,7 +361,7 @@
     (:method M_unload_box_from_carrier_2
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply ?c - carrier)
         :task
-        (T_unload_box_from_carrier ?c ?b ?l1 ?r)
+        (T_unload_box_from_carrier ?c ?b)
         :subtasks(and
             (task0
                 (unload_box2_from_carrier ?c ?b ?l1 ?r))
@@ -371,7 +371,7 @@
     (:method M_unload_box_from_carrier_3
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply ?c - carrier)
         :task
-        (T_unload_box_from_carrier ?c ?b ?l1 ?r)
+        (T_unload_box_from_carrier ?c ?b)
         :subtasks(and
             (task0
                 (unload_box3_from_carrier ?c ?b ?l1 ?r))
@@ -381,7 +381,7 @@
     (:method M_unload_box_from_carrier_4
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply ?c - carrier)
         :task
-        (T_unload_box_from_carrier ?c ?b ?l1 ?r)
+        (T_unload_box_from_carrier ?c ?b)
         :subtasks(and
             (task0
                 (unload_box4_from_carrier ?c ?b ?l1 ?r))
@@ -391,7 +391,7 @@
     (:method M_fill_box_with_supply
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply)
         :task
-        (T_fill_box_with_supply ?r ?l1 ?b ?s)
+        (T_fill_box_with_supply  ?b ?s)
         :subtasks(and
             (task0
                 (fill_box ?r ?l1 ?b ?s))
@@ -401,7 +401,7 @@
     (:method M_empty_box_from_supply
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply)
         :task
-        (T_empty_box_from_supply ?r ?l1 ?b ?s)
+        (T_empty_box_from_supply ?b ?s)
         :subtasks(and
             (task0
                 (empty_box ?r ?l1 ?b ?s))
@@ -418,104 +418,104 @@
         )
     )
 
-    ; actions for elements already true
-    (:method M_carrier_already_at_location
-		:parameters (?c - carrier ?r - robotic_agent ?l1 - location ?l2 - location)
-		:task (T_move_robot_with_carrier ?c ?r ?l1 ?l2)
-		:subtasks (and
-		    (task0 (carrier_already_at_location ?c ?l2))
-		)
-	)
+;     ; actions for elements already true
+;     (:method M_carrier_already_at_location
+; 		:parameters (?c - carrier ?r - robotic_agent ?l1 - location ?l2 - location)
+; 		:task (T_move_robot_with_carrier ?c ?r ?l1 ?l2)
+; 		:subtasks (and
+; 		    (task0 (carrier_already_at_location ?c ?l2))
+; 		)
+; 	)
 
-    (:action carrier_already_at_location
-        :parameters (?c - carrier ?l - location)
-        :precondition (location_carrier ?c ?l)
-        :effect ()
-    )
+;     (:action carrier_already_at_location
+;         :parameters (?c - carrier ?l - location)
+;         :precondition (location_carrier ?c ?l)
+;         :effect ()
+;     )
 
-    (:method M_robot_already_at_location
-		:parameters (?r - robotic_agent ?l1 - location ?l2 - location)
-		:task (T_move_robot ?r ?r ?l1 ?l2)
-		:subtasks (and
-		    (task0 (robot_already_at_location ?r ?l2))
-		)
-	)
+;     (:method M_robot_already_at_location
+; 		:parameters (?r - robotic_agent ?l1 - location ?l2 - location)
+; 		:task (T_move_robot ?r ?r ?l1 ?l2)
+; 		:subtasks (and
+; 		    (task0 (robot_already_at_location ?r ?l2))
+; 		)
+; 	)
 
-    (:action robot_already_at_location
-        :parameters (?r - robotic_agent ?l - location)
-        :precondition (location_robot ?r ?l)
-        :effect ()
-    )
+;     (:action robot_already_at_location
+;         :parameters (?r - robotic_agent ?l - location)
+;         :precondition (location_robot ?r ?l)
+;         :effect ()
+;     )
     
-    (:method M_box_already_filled
-		:parameters (?r - robotic_agent ?l - location ?s - supply ?b - box)
-		:task (T_fill_box_with_supply ?r ?l ?b ?s)
-		:subtasks (and
-		    (task0 (box_already_filled ?b))
-		)
-	)
+;     (:method M_box_already_filled
+; 		:parameters (?r - robotic_agent ?l - location ?s - supply ?b - box)
+; 		:task (T_fill_box_with_supply ?r ?l ?b ?s)
+; 		:subtasks (and
+; 		    (task0 (box_already_filled ?b))
+; 		)
+; 	)
 
-    (:action box_already_filled
-        :parameters (?b - box)
-        :precondition (not (box_is_empty ?b))
-        :effect ()
-    )
+;     (:action box_already_filled
+;         :parameters (?b - box)
+;         :precondition (not (box_is_empty ?b))
+;         :effect ()
+;     )
 
-    (:method M_box_already_loaded
-        :parameters (?r - robotic_agent ?l - location ?c - carrier ?b - box)
-        :task (T_load_box_on_carrier ?c ?b ?l ?r)
-        :subtasks (and
-            (task0 (box_already_loaded ?b))
-        )
-    )
+;     (:method M_box_already_loaded
+;         :parameters (?r - robotic_agent ?l - location ?c - carrier ?b - box)
+;         :task (T_load_box_on_carrier ?c ?b ?l ?r)
+;         :subtasks (and
+;             (task0 (box_already_loaded ?b))
+;         )
+;     )
 
-    (:action box_already_loaded
-        :parameters (?b - box)
-        :precondition (box_loaded ?b)
-        :effect ()
-    )
+;     (:action box_already_loaded
+;         :parameters (?b - box)
+;         :precondition (box_loaded ?b)
+;         :effect ()
+;     )
 
-    ; (:method M_box_already_loaded_with_carrier
-    ; :parameters (?r - robotic_agent ?l - location ?b - box ?c - carrier)
-    ; :task (T_load_box_on_carrier ?c ?b ?l ?r )
-    ; :subtasks (and
-    ;     (task0 (box_already_loaded_with_carrier ?b))
-    ; )
-    ; )
+;     ; (:method M_box_already_loaded_with_carrier
+;     ; :parameters (?r - robotic_agent ?l - location ?b - box ?c - carrier)
+;     ; :task (T_load_box_on_carrier ?c ?b ?l ?r )
+;     ; :subtasks (and
+;     ;     (task0 (box_already_loaded_with_carrier ?b))
+;     ; )
+;     ; )
 
-    ; (:action box_already_loaded_with_carrier
-    ;     :parameters (?b - box ?c - carrier)
-    ;     :precondition (and (box_loaded ?b) (box_on_carrier ?b ?c))
-    ;     :effect ()
-    ; )
+;     ; (:action box_already_loaded_with_carrier
+;     ;     :parameters (?b - box ?c - carrier)
+;     ;     :precondition (and (box_loaded ?b) (box_on_carrier ?b ?c))
+;     ;     :effect ()
+;     ; )
 
-   (:method M_box_already_unloaded
-    :parameters (?r - robotic_agent ?l - location ?c - carrier ?b - box)
-    :task (T_unload_box_from_carrier ?c ?b ?l ?r)
-    :subtasks (and
-        (task0 (box_already_unloaded ?b))
-    )
-    )
+;    (:method M_box_already_unloaded
+;     :parameters (?r - robotic_agent ?l - location ?c - carrier ?b - box)
+;     :task (T_unload_box_from_carrier ?c ?b ?l ?r)
+;     :subtasks (and
+;         (task0 (box_already_unloaded ?b))
+;     )
+;     )
 
-    (:action box_already_unloaded
-        :parameters (?b - box)
-        :precondition (not (box_loaded ?b))
-        :effect ()
-    )
+;     (:action box_already_unloaded
+;         :parameters (?b - box)
+;         :precondition (not (box_loaded ?b))
+;         :effect ()
+;     )
 
-    (:method M_box_already_empty
-    :parameters (?r - robotic_agent ?l - location ?s - supply ?b - box)
-    :task (T_empty_box_from_supply ?r ?l ?b ?s)
-    :subtasks (and
-        (task0 (box_already_empty ?b))
-    )
-    )
+;     (:method M_box_already_empty
+;     :parameters (?r - robotic_agent ?l - location ?s - supply ?b - box)
+;     :task (T_empty_box_from_supply ?r ?l ?b ?s)
+;     :subtasks (and
+;         (task0 (box_already_empty ?b))
+;     )
+;     )
 
-    (:action box_already_empty
-        :parameters (?b - box)
-        :precondition (box_is_empty ?b)
-        :effect ()
-    )
+;     (:action box_already_empty
+;         :parameters (?b - box)
+;         :precondition (box_is_empty ?b)
+;         :effect ()
+;     )
 
 
 

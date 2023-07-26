@@ -15,10 +15,13 @@
         :parameters ()
         :subtasks
         (and
-            ; (task0 (T_deliver_1_supp per2 food1 ))
-            ; (task1 (T_deliver_2_supp per1 med1 tools1))
-            (task0
-                (T_deliver_supply robot1 location1 per1 med1 box1)))
+            (task0 (T_deliver_1_supp per1 med1 ))
+            ; ; (task1 (T_deliver_2_supp per1 med1 tools1))
+            ; (task0
+            ;     (T_load_box_on_carrier carrier1 box1 location0 robot1))
+            ; (task1
+            ;     (T_load_box_on_carrier carrier1 box2 location0 robot1))
+        )
     )
 
     (:init
@@ -43,5 +46,6 @@
         (box_is_empty box4)
         ; closed world assumptions
     )
+
 
 )
