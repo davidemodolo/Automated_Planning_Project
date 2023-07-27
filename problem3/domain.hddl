@@ -38,40 +38,6 @@
         )
     )
 
-    (:task T_move_carrier
-        :parameters (?c - carrier ?l2 - location)
-        :precondition ()
-        :effect ()
-    )
-
-    (:method M_move_robot_with_carrier
-        :parameters (?r - robotic_agent ?l1 - location ?l2 - location ?c - carrier)
-        :task
-        (T_move_carrier ?c ?l2)
-        :subtasks(and
-                (task0 (move_robot_with_carrier ?r ?l1 ?l2 ?c))
-            
-        )
-        ; :ordering(and
-        ;     (task0 < task1)
-        ; )
-    )
-
-    (:action move_robot_with_carrier
-        :parameters (?r - robotic_agent ?l1 - location ?l2 - location ?c - carrier)
-        :precondition (and
-            (location_robot ?r ?l1)
-            (location_carrier ?c ?l1)
-            (robot_carrier_attached ?r ?c)
-        )
-        :effect (and
-            (not (location_robot ?r ?l1))
-            (location_robot ?r ?l2)
-            (not (location_carrier ?c ?l1))
-            (location_carrier ?c ?l2)
-        )
-    )
-
     (:task T_attach_carrier_to_robot
         :parameters (?r - robotic_agent ?c - carrier)
         :precondition ()

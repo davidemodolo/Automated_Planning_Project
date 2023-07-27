@@ -6,11 +6,12 @@
         robot1 - robotic_agent
         carrier1 - carrier
     )
+
     (:htn
         :parameters ()
         :subtasks
         (and
-            (task0 (T_attach_carrier_to_robot robot1 carrier1))
+            (task0 (T_move_robot robot1 location1))
         )
     )
 
@@ -20,6 +21,5 @@
         (carrier_has_no_robot carrier1)
         (robot_has_no_carrier robot1)
     )
-
-
 )
+
