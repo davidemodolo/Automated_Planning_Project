@@ -49,15 +49,12 @@
         :task
         (T_move_carrier ?c ?l2)
         :subtasks(and
-            (task0
-                (T_attach_carrier_to_robot ?r ?c))
-            (task1
-                (move_robot_with_carrier ?r ?l1 ?l2 ?c))
+                (task0 (move_robot_with_carrier ?r ?l1 ?l2 ?c))
             
         )
-        :ordering(and
-            (task0 < task1)
-        )
+        ; :ordering(and
+        ;     (task0 < task1)
+        ; )
     )
 
     (:action move_robot_with_carrier

@@ -10,7 +10,7 @@
         :parameters ()
         :subtasks
         (and
-            (task0 (T_move_carrier carrier1 location1))
+            (task0 (T_attach_carrier_to_robot robot1 carrier1))
         )
     )
 
