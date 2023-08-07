@@ -2,7 +2,7 @@
     (:domain problem2)
 
     (:objects
-        location0 location1 location2 location3 - location
+        depot location1 location2 location3 - location
         carrier1 - carrier
         box1 box2 box3 box4 - box
         robot1 - robotic_agent
@@ -13,19 +13,19 @@
     )
 
     (:init
-        (location_robot robot1 location0)
-        (location_person per1 location1)
-        (location_person per2 location2)
-        (location_person per3 location3)
-        (location_box box1 location0)
-        (location_box box2 location0)
-        (location_box box3 location0)
-        (location_box box4 location0)
-        (location_supply med1 location0)
-        (location_supply food1 location0)
-        (location_supply food2 location0)
-        (location_supply tools1 location0)
-        (location_carrier carrier1 location0)
+        (located_at robot1 depot)
+        (located_at per1 location1)
+        (located_at per2 location2)
+        (located_at per3 location3)
+        (located_at box1 depot)
+        (located_at box2 depot)
+        (located_at box3 depot)
+        (located_at box4 depot)
+        (located_at med1 depot)
+        (located_at food1 depot)
+        (located_at food2 depot)
+        (located_at tools1 depot)
+        (located_at carrier1 depot)
         (carrier_has_no_robot carrier1)
         (robot_has_no_carrier robot1)
         (box_is_empty box1)
