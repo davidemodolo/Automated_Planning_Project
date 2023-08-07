@@ -23,51 +23,51 @@
     )
 
     (:predicates
-        (location_person ?p - person ?l - location)
-        (location_robot ?r - robotic_agent ?l - location)
-        (location_box ?b - box ?l - location)
-        (location_supply ?s - supply ?l - location)
+        (located_at ?x - (either robotic_agent box supply) ?loc - location)
+        
         (robot_has_box ?r - robotic_agent ?b - box)
         (robot_has_no_box ?r - robotic_agent)
+
         (box_with_supply ?b - box ?s - supply)
         (box_is_empty ?b - box) 
+
         (delivered ?p - person ?s - supply)
     )
 
     (:action move_robot
-        :parameters (?r - robotic_agent ?l1 - location ?l2 - location)
-        :precondition (and (location_robot ?r ?l1) (not (= ?l1 ?l2)))
-        :effect (and (not (location_robot ?r ?l1)) (location_robot ?r ?l2))
+        :parameters (?r - robotic_agent ?l1 ?l2 - location)
+        :precondition (and (located_at ?r ?l1) (not (= ?l1 ?l2)))
+        :effect (and (not (located_at ?r ?l1)) (located_at ?r ?l2))
     )
 
     (:action take_box
         :parameters (?r - robotic_agent ?l1 - location ?b - box)
-        :precondition (and (location_robot ?r ?l1) (location_box ?b ?l1) (not (robot_has_box ?r ?b)) (robot_has_no_box ?r))
-        :effect (and (not (location_box ?b ?l1)) (robot_has_box ?r ?b) (not (robot_has_no_box ?r)))
+        :precondition (and (located_at ?r ?l1) (located_at ?b ?l1) (not (robot_has_box ?r ?b)) (robot_has_no_box ?r))
+        :effect (and (not (located_at ?b ?l1)) (robot_has_box ?r ?b) (not (robot_has_no_box ?r)))
     )
 
     (:action drop_box
         :parameters (?r - robotic_agent ?l1 - location ?b - box)
-        :precondition (and (location_robot ?r ?l1) (robot_has_box ?r ?b) (not(robot_has_no_box ?r)))
-        :effect (and (not (robot_has_box ?r ?b)) (location_box ?b ?l1) (robot_has_no_box ?r))
+        :precondition (and (located_at ?r ?l1) (robot_has_box ?r ?b) (not(robot_has_no_box ?r)))
+        :effect (and (not (robot_has_box ?r ?b)) (located_at ?b ?l1) (robot_has_no_box ?r))
     )
 
     (:action fill_box
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply)
-        :precondition (and (location_robot ?r ?l1) (robot_has_box ?r ?b) (location_supply ?s ?l1) (box_is_empty ?b))
-        :effect (and (not (location_supply ?s ?l1)) (box_with_supply ?b ?s) (not (box_is_empty ?b)))
+        :precondition (and (located_at ?r ?l1) (located_at ?s ?l1) (robot_has_box ?r ?b)  (box_is_empty ?b))
+        :effect (and (not (located_at ?s ?l1)) (box_with_supply ?b ?s) (not (box_is_empty ?b)))
     )
 
     (:action empty_box ; not used action, here in the case we want to empty a box that is somehow filled with a supply we don't need to deliver
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply)
-        :precondition (and (location_robot ?r ?l1) (robot_has_box ?r ?b) (box_with_supply ?b ?s) (not (box_is_empty ?b)))
-        :effect (and (not (box_with_supply ?b ?s)) (location_supply ?s ?l1) (box_is_empty ?b))
+        :precondition (and (located_at ?r ?l1) (robot_has_box ?r ?b) (box_with_supply ?b ?s) (not (box_is_empty ?b)))
+        :effect (and (not (box_with_supply ?b ?s)) (located_at ?s ?l1) (box_is_empty ?b))
     )
 
     (:action deliver
         :parameters (?r - robotic_agent ?l1 - location ?p - person ?s - supply ?b - box)
-        :precondition (and (location_robot ?r ?l1) (location_person ?p ?l1) (robot_has_box ?r ?b) (box_with_supply ?b ?s) (not (box_is_empty ?b)))
-        :effect (and (not (robot_has_box ?r ?b)) (not (box_with_supply ?b ?s)) (delivered ?p ?s) (location_box ?b ?l1) (box_is_empty ?b) (robot_has_no_box ?r))
+        :precondition (and (located_at ?r ?l1) (located_at ?p ?l1) (robot_has_box ?r ?b) (box_with_supply ?b ?s) (not (box_is_empty ?b)))
+        :effect (and (not (robot_has_box ?r ?b)) (not (box_with_supply ?b ?s)) (delivered ?p ?s) (located_at ?b ?l1) (box_is_empty ?b) (robot_has_no_box ?r))
     )
 
 )
