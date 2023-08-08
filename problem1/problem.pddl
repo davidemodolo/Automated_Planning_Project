@@ -1,5 +1,5 @@
 (define (problem problem1)
-    (:domain problem1)
+    (:domain domain1)
 
     (:objects
         depot location1 location2 location3 - location

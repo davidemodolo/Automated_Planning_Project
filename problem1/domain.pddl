@@ -13,7 +13,7 @@
 ; pick up a single box and load it on the robotic agent
 ; move to another location
 
-(define (domain problem1)
+(define (domain domain1)
     (:requirements :strips :typing :equality :negative-preconditions :disjunctive-preconditions)
     (:types
         person robotic_agent location box - object
