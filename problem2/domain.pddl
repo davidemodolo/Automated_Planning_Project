@@ -1,4 +1,4 @@
-(define (domain problem2)
+(define (domain domain2)
     (:requirements :strips :typing :equality :negative-preconditions :disjunctive-preconditions :conditional-effects :existential-preconditions :universal-preconditions)
     (:types
         person robotic_agent location box carrier supply - object
@@ -14,15 +14,12 @@
         (robot_has_no_carrier ?r - robotic_agent)
         (robot_carrier_attached ?r - robotic_agent ?c - carrier)
         ; since a carrier can load only up to 4 boxes, we create all the predicates
-        ; because :numeric-fluents is not fully supported in many PDDL solvers
-        (carrier_has_box1 ?c - carrier)
-        (carrier_has_box2 ?c - carrier)
-        (carrier_has_box3 ?c - carrier)
-        (carrier_has_box4 ?c - carrier)
-        (carrier_loaded_1 ?c - carrier ?b - box)
-        (carrier_loaded_2 ?c - carrier ?b - box)
-        (carrier_loaded_3 ?c - carrier ?b - box)
-        (carrier_loaded_4 ?c - carrier ?b - box)
+        ; because :numeric-fluents is not fully supported in many PDDL solvers (we tested using LAMA and other planners)
+        (carrier_has_no_boxes ?c - carrier)
+        (carrier_has_one_box ?c - carrier)
+        (carrier_has_two_boxes ?c - carrier)
+        (carrier_has_three_boxes ?c - carrier)
+        (carrier_has_four_boxes ?c - carrier)
         (delivered ?p - person ?s - supply)
     )
 
@@ -36,33 +33,14 @@
         )
     )
 
-    ; attach a carrier to a robot
-    (:action attach_carrier_to_robot
-        :parameters (?r - robotic_agent ?l1 - location ?c - carrier)
-        :precondition (and (located_at ?r ?l1) (located_at ?c ?l1) (carrier_has_no_robot ?c) (robot_has_no_carrier ?r))
-        :effect (and (not (carrier_has_no_robot ?c)) (not (robot_has_no_carrier ?r)) (robot_carrier_attached ?r ?c))
-    )
-
-    ; detatch a carrier from a robot
-    (:action detach_carrier_from_robot
-        :parameters (?r - robotic_agent ?l1 - location ?c - carrier)
-        :precondition (and (located_at ?r ?l1) (robot_carrier_attached ?r ?c))
-        :effect (and (carrier_has_no_robot ?c) (robot_has_no_carrier ?r)
-            (not (robot_carrier_attached ?r ?c)))
-    )
-
     ; move a robot with a carrier attached
-    (:action move_robot_with_carrier_no_box
-        :parameters (?r - robotic_agent ?l1 ?l2 - location ?c - carrier)
+    (:action move_robot_with_carrier
+        :parameters (?r - robotic_agent ?c - carrier ?l1 ?l2 - location)
         :precondition (and
             (located_at ?r ?l1)
             (located_at ?c ?l1)
             (robot_carrier_attached ?r ?c)
             (not (= ?l1 ?l2))
-            (not (carrier_has_box1 ?c))
-            (not (carrier_has_box2 ?c))
-            (not (carrier_has_box3 ?c))
-            (not (carrier_has_box4 ?c))
         )
         :effect (and
             (not (located_at ?r ?l1))
@@ -72,273 +50,94 @@
         )
     )
 
-    (:action move_robot_with_carrier_box1
-        :parameters (?r - robotic_agent ?l1 - location ?l2 - location ?c - carrier ?b - box)
-        :precondition (and
-            (located_at ?r ?l1)
-            (located_at ?c ?l1)
-            (located_at ?b ?l1)
-            (robot_carrier_attached ?r ?c)
-            (not (= ?l1 ?l2)) (carrier_has_box1 ?c)
-            (carrier_loaded_1 ?c ?b)
-            (not (carrier_has_box2 ?c)) (not (carrier_has_box3 ?c)) (not (carrier_has_box4 ?c))
-            (box_loaded ?b)
-        )
-        :effect (and
-            (not (located_at ?r ?l1))
-            (located_at ?r ?l2)
-            (not (located_at ?c ?l1))
-            (located_at ?c ?l2)
-            (not (located_at ?b ?l1))
-            (located_at ?b ?l2)
-        )
+    ; attach a carrier to a robot
+    (:action attach_carrier_to_robot
+        :parameters (?r - robotic_agent ?l1 - location ?c - carrier)
+        :precondition (and (located_at ?r ?l1) (located_at ?c ?l1) (carrier_has_no_robot ?c) (robot_has_no_carrier ?r))
+        :effect (and (not (carrier_has_no_robot ?c)) (not (robot_has_no_carrier ?r)) (robot_carrier_attached ?r ?c) (carrier_has_no_boxes ?c)) ; assumption that the carrier is initially empty
     )
 
-    (:action move_robot_with_carrier_box12
-        :parameters (?r - robotic_agent ?l1 - location ?l2 - location ?c - carrier ?b1 - box ?b2 - box)
-        :precondition (and
-            (located_at ?r ?l1)
-            (located_at ?c ?l1)
-            (located_at ?b1 ?l1)
-            (located_at ?b2 ?l1)
-            (robot_carrier_attached ?r ?c)
-            (not (= ?l1 ?l2)) (carrier_has_box1 ?c) (carrier_has_box2 ?c)
-            (carrier_loaded_1 ?c ?b1) (carrier_loaded_2 ?c ?b2)
-            (not (carrier_has_box3 ?c)) (not (carrier_has_box4 ?c))
-            (box_loaded ?b1) (box_loaded ?b2)
-        )
-        :effect (and
-            (not (located_at ?r ?l1))
-            (located_at ?r ?l2)
-            (not (located_at ?c ?l1))
-            (located_at ?c ?l2)
-            (not (located_at ?b1 ?l1))
-            (located_at ?b1 ?l2)
-            (not (located_at ?b2 ?l1))
-            (located_at ?b2 ?l2)
-        )
-
+    ; detach a carrier from a robot
+    (:action detach_carrier_from_robot
+        :parameters (?r - robotic_agent ?l1 - location ?c - carrier)
+        :precondition (and (located_at ?r ?l1) (robot_carrier_attached ?r ?c) (carrier_has_no_boxes ?c))
+        :effect (and (carrier_has_no_robot ?c) (robot_has_no_carrier ?r)
+            (not (robot_carrier_attached ?r ?c)) (not (carrier_has_four_boxes ?c)))
     )
 
-    (:action move_robot_with_carrier_box123
-        :parameters (?r - robotic_agent ?l1 - location ?l2 - location ?c - carrier ?b1 - box ?b2 - box ?b3 - box)
-        :precondition (and
-            (located_at ?r ?l1)
-            (located_at ?c ?l1)
-            (located_at ?b1 ?l1)
-            (located_at ?b2 ?l1)
-            (located_at ?b3 ?l1)
-            (robot_carrier_attached ?r ?c)
-            (not (= ?l1 ?l2)) (carrier_has_box1 ?c) (carrier_has_box2 ?c) (carrier_has_box3 ?c)
-            (carrier_loaded_1 ?c ?b1) (carrier_loaded_2 ?c ?b2) (carrier_loaded_3 ?c ?b3)
-            (box_loaded ?b1) (box_loaded ?b2) (box_loaded ?b3)
-            (not (carrier_has_box4 ?c))
-        )
-        :effect (and
-            (not (located_at ?r ?l1))
-            (located_at ?r ?l2)
-            (not (located_at ?c ?l1))
-            (located_at ?c ?l2)
-            (not (located_at ?b1 ?l1))
-            (located_at ?b1 ?l2)
-            (not (located_at ?b2 ?l1))
-            (located_at ?b2 ?l2)
-            (not (located_at ?b3 ?l1))
-            (located_at ?b3 ?l2)
-        )
-    )
-
-    (:action move_robot_with_carrier_box1234
-        :parameters (?r - robotic_agent ?l1 - location ?l2 - location ?c - carrier ?b1 - box ?b2 - box ?b3 - box ?b4 - box)
-        :precondition (and
-            (located_at ?r ?l1)
-            (located_at ?c ?l1)
-            (located_at ?b1 ?l1)
-            (located_at ?b2 ?l1)
-            (located_at ?b3 ?l1)
-            (located_at ?b4 ?l1)
-            (robot_carrier_attached ?r ?c)
-            (not (= ?l1 ?l2)) (carrier_has_box1 ?c) (carrier_has_box2 ?c) (carrier_has_box3 ?c) (carrier_has_box4 ?c)
-            (carrier_loaded_1 ?c ?b1) (carrier_loaded_2 ?c ?b2) (carrier_loaded_3 ?c ?b3) (carrier_loaded_4 ?c ?b4)
-            (box_loaded ?b1) (box_loaded ?b2) (box_loaded ?b3) (box_loaded ?b4)
-        )
-        :effect (and
-            (not (located_at ?r ?l1))
-            (located_at ?r ?l2)
-            (not (located_at ?c ?l1))
-            (located_at ?c ?l2)
-            (not (located_at ?b1 ?l1))
-            (located_at ?b1 ?l2)
-            (not (located_at ?b2 ?l1))
-            (located_at ?b2 ?l2)
-            (not (located_at ?b3 ?l1))
-            (located_at ?b3 ?l2)
-            (not (located_at ?b4 ?l1))
-            (located_at ?b4 ?l2)
-        )
-    )
-
-    ; assumption: a box can be loaded by a robot even if it is not attached to the carrier
-    (:action load_box1_on_carrier
+    (:action load_box_on_carrier
         :parameters (?c - carrier ?b - box ?l - location ?r - robotic_agent)
         :precondition (and
             (located_at ?c ?l)
             (located_at ?b ?l)
             (located_at ?r ?l)
             (not (box_loaded ?b))
-            (not(carrier_has_box1 ?c))
-        )
-        :effect (and
-            (box_on_carrier ?b ?c)
-            (box_loaded ?b)
-            (carrier_has_box1 ?c)
-            (carrier_loaded_1 ?c ?b)
-        )
-    )
-
-    ; now the unload
-    (:action unload_box1_from_carrier
-        :parameters (?c - carrier ?b - box ?l - location ?r - robotic_agent)
-        :precondition (and
-            (located_at ?c ?l)
-            (located_at ?b ?l)
-            (box_on_carrier ?b ?c)
-            (box_loaded ?b)
-            (located_at ?r ?l)
-            (carrier_loaded_1 ?c ?b)
-            (carrier_has_box1 ?c)
-            (not (carrier_has_box2 ?c)) (not (carrier_has_box3 ?c)) (not (carrier_has_box4 ?c))
-        )
-        :effect (and
             (not (box_on_carrier ?b ?c))
-            (not (box_loaded ?b))
-            (located_at ?b ?l)
-            (not (carrier_has_box1 ?c))
-            (not (carrier_loaded_1 ?c ?b))
-        )
-    )
-
-    (:action load_box2_on_carrier
-        :parameters (?c - carrier ?b - box ?l - location ?r - robotic_agent)
-        :precondition (and
-            (located_at ?c ?l)
-            (located_at ?b ?l)
-            (located_at ?r ?l)
-            (not (box_loaded ?b))
-            (carrier_has_box1 ?c)
-            (not(carrier_has_box2 ?c))
+            (not (box_is_empty ?b))
+            (or 
+                (carrier_has_no_boxes ?c)
+                (carrier_has_one_box ?c)
+                (carrier_has_two_boxes ?c)
+                (carrier_has_three_boxes ?c)) ; if (carrier_has_four_boxes ?c) == TRUE, means we reach max of boxes to load, no more boxes can be loaded
         )
         :effect (and
             (box_on_carrier ?b ?c)
             (box_loaded ?b)
-            (carrier_has_box2 ?c)
-            (carrier_loaded_2 ?c ?b)
+            (not (located_at ?b ?l))
+            (when (carrier_has_no_boxes ?c)
+                (and
+                    (not (carrier_has_no_boxes ?c))
+                    (carrier_has_one_box ?c)))
+            (when (carrier_has_one_box ?c)
+                (and
+                    (not (carrier_has_one_box ?c))
+                    (carrier_has_two_boxes ?c)))
+            (when (carrier_has_two_boxes ?c)
+                (and
+                    (not (carrier_has_two_boxes ?c))
+                    (carrier_has_three_boxes ?c)))
+            (when (carrier_has_three_boxes ?c)
+                (and
+                    (not (carrier_has_three_boxes ?c))
+                    (carrier_has_four_boxes ?c)))
         )
     )
 
-    (:action unload_box2_from_carrier
+    (:action unload_box_from_carrier
         :parameters (?c - carrier ?b - box ?l - location ?r - robotic_agent)
         :precondition (and 
             (located_at ?c ?l)
-            (located_at ?b ?l)
+            (located_at ?r ?l)
             (box_on_carrier ?b ?c)
             (box_loaded ?b)
-            (located_at ?r ?l)
-            (carrier_loaded_2 ?c ?b)
-            (carrier_has_box2 ?c)
-            (not (carrier_has_box3 ?c)) (not (carrier_has_box4 ?c))
+            (or 
+                (carrier_has_one_box ?c)
+                (carrier_has_two_boxes ?c)
+                (carrier_has_three_boxes ?c)
+                (carrier_has_four_boxes ?c))
         )
         :effect (and
             (not (box_on_carrier ?b ?c))
             (not (box_loaded ?b))
             (located_at ?b ?l)
-            (not (carrier_has_box2 ?c))
-            (not (carrier_loaded_2 ?c ?b))
+            (when (carrier_has_one_box ?c)
+                (and
+                    (not (carrier_has_one_box ?c))
+                    (carrier_has_no_boxes ?c)))
+            (when (carrier_has_two_boxes ?c)
+                (and
+                    (not (carrier_has_two_boxes ?c))
+                    (carrier_has_one_box ?c)))
+            (when (carrier_has_three_boxes ?c)
+                (and
+                    (not (carrier_has_three_boxes ?c))
+                    (carrier_has_two_boxes ?c)))
+            (when (carrier_has_four_boxes ?c)
+                (and
+                    (not (carrier_has_four_boxes ?c))
+                    (carrier_has_three_boxes ?c)))
         )
     )
-
-    (:action load_box3_on_carrier
-        :parameters (?c - carrier ?b - box ?l - location ?r - robotic_agent)
-        :precondition (and
-            (located_at ?c ?l)
-            (located_at ?b ?l)
-            (located_at ?r ?l)
-            (not (box_loaded ?b))
-            (carrier_has_box1 ?c)
-            (carrier_has_box2 ?c)
-            (not(carrier_has_box3 ?c))
-        )
-        :effect (and
-            (box_on_carrier ?b ?c)
-            (box_loaded ?b)
-            (carrier_has_box3 ?c)
-            (carrier_loaded_3 ?c ?b)
-        )
-    )
-    
-
-    (:action unload_box3_from_carrier
-        :parameters (?c - carrier ?b - box ?l - location ?r - robotic_agent)
-        :precondition (and 
-            (located_at ?c ?l)
-            (located_at ?b ?l)
-            (box_on_carrier ?b ?c)
-            (box_loaded ?b)
-            (located_at ?r ?l)
-            (carrier_loaded_3 ?c ?b)
-            (carrier_has_box3 ?c)
-            (not (carrier_has_box4 ?c))
-        )
-        :effect (and
-            (not (box_on_carrier ?b ?c))
-            (not (box_loaded ?b))
-            (located_at ?b ?l)
-            (not (carrier_has_box3 ?c))
-            (not (carrier_loaded_3 ?c ?b))
-        )
-    )
-
-    (:action load_box4_on_carrier
-        :parameters (?c - carrier ?b - box ?l - location ?r - robotic_agent)
-        :precondition (and
-            (located_at ?c ?l)
-            (located_at ?b ?l)
-            (located_at ?r ?l)
-            (not (box_loaded ?b))
-            (carrier_has_box1 ?c)
-            (carrier_has_box2 ?c)
-            (carrier_has_box3 ?c)
-            (not(carrier_has_box4 ?c))
-        )
-        :effect (and
-            (box_on_carrier ?b ?c)
-            (box_loaded ?b)
-            (carrier_has_box4 ?c)
-            (carrier_loaded_4 ?c ?b)
-        )
-    )
-    
-
-    (:action unload_box4_from_carrier
-        :parameters (?c - carrier ?b - box ?l - location ?r - robotic_agent)
-        :precondition (and 
-            (located_at ?c ?l)
-            (located_at ?b ?l)
-            (box_on_carrier ?b ?c)
-            (box_loaded ?b)
-            (located_at ?r ?l)
-            (carrier_loaded_4 ?c ?b)
-            (carrier_has_box4 ?c)
-        )
-        :effect (and
-            (not (box_on_carrier ?b ?c))
-            (not (box_loaded ?b))
-            (located_at ?b ?l)
-            (not (carrier_has_box4 ?c))
-            (not (carrier_loaded_4 ?c ?b))
-        )
-    )
-    
 
     (:action fill_box ; box is required to not be on a carrier to be filled
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply)
