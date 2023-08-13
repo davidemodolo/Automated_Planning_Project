@@ -18,7 +18,7 @@
             (task0 (T_deliver_supply per1 med1))
             (task1 (T_deliver_supply per1 tools1))
             (task2 (T_deliver_supply per2 food1)) 
-            (task3 (T_deliver_supply per3 food2))
+            (task3 (T_deliver_supply per3 food2)) ; takes long time to find a plan
         )
         :ordering (and  
             (task0 < task1)
