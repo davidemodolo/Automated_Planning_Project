@@ -32,6 +32,7 @@
         (box_is_empty box2)
         (box_is_empty box3)
         (box_is_empty box4)
+        (= (num_boxes carrier1) 0)
         ; closed world assumptions
     )
     
@@ -39,14 +40,14 @@
         (and
             (delivered per1 med1)
             (delivered per1 tools1)
-            
-            (delivered per2 food1) 
-            (delivered per3 food2)
 
-            ; does not work with these planners
+            ;; does not work with these planners, found a new solution
             ; (or (and (delivered per2 food1) (delivered per3 food2))
             ;     (and (delivered per2 food2) (delivered per3 food1))
             ; )
+
+            (delivered per2 food1) 
+            (delivered per3 food2)
         )
     )
 

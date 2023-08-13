@@ -4,13 +4,14 @@
 ; In general, the parallel execution of actions is possible when they involve different entities 
 ; (robotic agents, carriers, boxes, etc.) and there's no overlap in the preconditions and effects of the actions.
 
-; NOTE DI RIMOZIONE
+; NOTE IMPORTANTI
 ; non supporta either, cambio con estensione di tutti i possibili predicati
 ; non supporta il formato suggerito dall extension PDDL, bisogna scrivere le conditions una alla volta con at start at and ecc.. come specificato sulla documentazione https://planning.wiki/ref/pddl21/domain#durative-actions
 ; optic planner non supporta i not nelle preconditions, mentre tfd si
+; accetta numeric fluent, semplifica di mooolto la cosa
 
 (define (domain domain4)
-    (:requirements :strips :typing :durative-actions :disjunctive-preconditions :equality :negative-preconditions)
+    (:requirements :strips :typing :durative-actions :disjunctive-preconditions :equality :negative-preconditions :numeric-fluents)
     (:types
         person robotic_agent location box carrier supply - object
         food medicine tools - supply
@@ -37,6 +38,9 @@
         (carrier_has_three_boxes ?c - carrier)
         (carrier_has_four_boxes ?c - carrier)
         (delivered ?p - person ?s - supply)
+    )
+    (:functions
+        (num_boxes ?c - carrier)
     )
 
     ; move the robot
@@ -115,36 +119,16 @@
                         (at start (located_at_box ?b ?l))
                         (at start (not (box_loaded ?b)))
                         (at start (not (box_on_carrier ?b ?c)))
+                        (at start (< (num_boxes ?c) 4))
                         (over all (located_at_carrier ?c ?l))
                         (over all (located_at_robot ?r ?l))
                         (over all (not (box_is_empty ?b)))
-                        ; (at start (or 
-                        ;         (carrier_has_no_boxes ?c)
-                        ;         (carrier_has_one_box ?c)
-                        ;         (carrier_has_two_boxes ?c)
-                        ;         (carrier_has_three_boxes ?c)) ; if (carrier_has_four_boxes ?c) == TRUE, means we reach max of boxes to load, no more boxes can be loaded
-                        ; )
         )
         :effect (and 
-            (at start (not (located_at_box ?b ?l)))
-            (at end (box_on_carrier ?b ?c))
-            (at end (box_loaded ?b))
-                ; (when (carrier_has_no_boxes ?c)
-                ;     (and
-                ;         (not (carrier_has_no_boxes ?c))
-                ;         (carrier_has_one_box ?c)))
-                ; (when (carrier_has_one_box ?c)
-                ;     (and
-                ;         (not (carrier_has_one_box ?c))
-                ;         (carrier_has_two_boxes ?c)))
-                ; (when (carrier_has_two_boxes ?c)
-                ;     (and
-                ;         (not (carrier_has_two_boxes ?c))
-                ;         (carrier_has_three_boxes ?c)))
-                ; (when (carrier_has_three_boxes ?c)
-                ;     (and
-                ;         (not (carrier_has_three_boxes ?c))
-                ;         (carrier_has_four_boxes ?c)))
+                    (at start (not (located_at_box ?b ?l)))
+                    (at end (box_on_carrier ?b ?c))
+                    (at end (box_loaded ?b))
+                    (at end (increase (num_boxes ?c) 1))
         )
     )
 
@@ -153,36 +137,16 @@
         :parameters (?c - carrier ?b - box ?l - location ?r - robotic_agent)
         :duration (= ?duration 3)
         :condition (and 
-            (at start (box_on_carrier ?b ?c))
-            (at start (box_loaded ?b))
-            (over all (located_at_carrier ?c ?l))
-            (over all (located_at_robot ?r ?l))
-                    ;         (or 
-                    ; (carrier_has_one_box ?c)
-                    ; (carrier_has_two_boxes ?c)
-                    ; (carrier_has_three_boxes ?c)
-                    ; (carrier_has_four_boxes ?c))
+                        (at start (box_on_carrier ?b ?c))
+                        (at start (box_loaded ?b))
+                        (over all (located_at_carrier ?c ?l))
+                        (over all (located_at_robot ?r ?l))
         )
         :effect (and 
-            (at start (located_at_box ?b ?l))
-            (at end (not (box_on_carrier ?b ?c)))
-            (at end (not (box_loaded ?b)))
-                ; (when (carrier_has_one_box ?c)
-                ;     (and
-                ;         (not (carrier_has_one_box ?c))
-                ;         (carrier_has_no_boxes ?c)))
-                ; (when (carrier_has_two_boxes ?c)
-                ;     (and
-                ;         (not (carrier_has_two_boxes ?c))
-                ;         (carrier_has_one_box ?c)))
-                ; (when (carrier_has_three_boxes ?c)
-                ;     (and
-                ;         (not (carrier_has_three_boxes ?c))
-                ;         (carrier_has_two_boxes ?c)))
-                ; (when (carrier_has_four_boxes ?c)
-                ;     (and
-                ;         (not (carrier_has_four_boxes ?c))
-                ;         (carrier_has_three_boxes ?c)))
+                    (at start (located_at_box ?b ?l))
+                    (at end (not (box_on_carrier ?b ?c)))
+                    (at end (not (box_loaded ?b)))
+                    (at end (decrease (num_boxes ?c) 1))
         )
     )
 
@@ -191,16 +155,16 @@
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply)
         :duration (= ?duration 4)
         :condition (and 
-            (at start (located_at_supply ?s ?l1)) 
-            (at start (box_is_empty ?b)) 
-            (at start (not (box_loaded ?b)))
-            (over all (located_at_robot ?r ?l1)) 
-            (over all (located_at_box ?b ?l1))
+                        (at start (located_at_supply ?s ?l1)) 
+                        (at start (box_is_empty ?b)) 
+                        (at start (not (box_loaded ?b)))
+                        (over all (located_at_robot ?r ?l1)) 
+                        (over all (located_at_box ?b ?l1))
         )
         :effect (and 
-            (at start (not (located_at_supply ?s ?l1))) 
-            (at start (not (box_is_empty ?b)))
-            (at end (box_with_supply ?b ?s)) 
+                    (at start (not (located_at_supply ?s ?l1))) 
+                    (at start (not (box_is_empty ?b)))
+                    (at end (box_with_supply ?b ?s)) 
         )
     )
     
@@ -208,17 +172,17 @@
         :parameters (?r - robotic_agent ?l1 - location ?p - person ?s - supply ?b - box)
         :duration (= ?duration 3)
         :condition (and 
-            (at start (box_with_supply ?b ?s)) 
-            (at start (not (box_is_empty ?b))) 
-            (at start (not (box_loaded ?b)))
-            (over all (located_at_robot ?r ?l1)) 
-            (over all (located_at_person ?p ?l1)) 
-            (over all (located_at_box ?b ?l1)) 
+                        (at start (box_with_supply ?b ?s)) 
+                        (at start (not (box_is_empty ?b))) 
+                        (at start (not (box_loaded ?b)))
+                        (over all (located_at_robot ?r ?l1)) 
+                        (over all (located_at_person ?p ?l1)) 
+                        (over all (located_at_box ?b ?l1)) 
         )
         :effect (and 
-            (at start (not (box_with_supply ?b ?s))) 
-            (at end (delivered ?p ?s)) 
-            (at end (box_is_empty ?b))
+                    (at start (not (box_with_supply ?b ?s))) 
+                    (at end (delivered ?p ?s)) 
+                    (at end (box_is_empty ?b))
         )
     )
 
