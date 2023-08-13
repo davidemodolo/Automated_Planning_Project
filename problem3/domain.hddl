@@ -29,6 +29,22 @@
         )
     )
 
+    (:method M_robot_already_at_location
+        :parameters (?r - robotic_agent ?l2 - location)
+        :task
+        (T_move_robot ?r ?l2)
+        :subtasks(and
+            (task0
+                (noop_move_robot ?r ?l2))
+        )
+    )
+
+    (:action noop_move_robot
+        :parameters (?r - robotic_agent ?l2 - location)
+        :precondition (location_robot ?r ?l2)
+        :effect ()
+    )
+
     (:action move_robot
         :parameters (?r - robotic_agent ?l1 - location ?l2 - location)
         :precondition (and (location_robot ?r ?l1))
@@ -39,18 +55,24 @@
     )
 
     (:task T_attach_carrier_to_robot
-        :parameters (?r - robotic_agent ?c - carrier)
+        :parameters (?c - carrier ?r - robotic_agent ?l1 - location)
         :precondition ()
         :effect ()
     )
 
-    (:method M_attach_carrier_to_robot
+    (:method M_attach_carrier_to_robot 
         :parameters (?r - robotic_agent ?l1 - location ?c - carrier)
         :task
-        (T_attach_carrier_to_robot ?r ?c)
+        (T_attach_carrier_to_robot ?c ?r ?l1)
         :subtasks(and
             (task0
+                (T_move_robot ?r ?l1))
+            (task1
                 (attach_carrier_to_robot ?r ?l1 ?c))
+
+        )
+        :ordering(and
+        (task0 < task1)
         )
     )
 
@@ -59,5 +81,6 @@
         :precondition (and (location_robot ?r ?l1) (location_carrier ?c ?l1) (carrier_has_no_robot ?c) (robot_has_no_carrier ?r))
         :effect (and (not (carrier_has_no_robot ?c)) (not (robot_has_no_carrier ?r)) (robot_carrier_attached ?r ?c))
     )
+
 
 )
