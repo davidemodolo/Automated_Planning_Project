@@ -28,6 +28,7 @@
         (located_at carrier1 depot)
         (carrier_has_no_robot carrier1)
         (robot_has_no_carrier robot1)
+        (carrier_has_no_boxes carrier1) ; assumption that the carrier is initially empty
         (box_is_empty box1)
         (box_is_empty box2)
         (box_is_empty box3)

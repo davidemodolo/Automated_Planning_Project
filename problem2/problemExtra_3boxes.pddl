@@ -1,4 +1,4 @@
-(define (problem problem2)
+(define (problem problem2-extra)
     (:domain domain2)
 
     (:objects
