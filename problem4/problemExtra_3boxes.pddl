@@ -1,10 +1,10 @@
-(define (problem problem4)
+(define (problem problem4-extra)
     (:domain domain4)
 
     (:objects
         depot location1 location2 location3 - location
         carrier1 - carrier
-        box1 box2 box3 box4 - box
+        box1 box2 box3 - box
         robot1 - robotic_agent
         med1 - medicine
         food1 food2 - food
@@ -20,7 +20,6 @@
         (located_at_box box1 depot)
         (located_at_box box2 depot)
         (located_at_box box3 depot)
-        (located_at_box box4 depot)
         (located_at_supply med1 depot)
         (located_at_supply food1 depot)
         (located_at_supply food2 depot)
@@ -31,7 +30,6 @@
         (box_is_empty box1)
         (box_is_empty box2)
         (box_is_empty box3)
-        (box_is_empty box4)
         (= (num_boxes carrier1) 0)
         ; closed world assumptions
     )
@@ -40,14 +38,8 @@
         (and
             (delivered per1 med1)
             (delivered per1 tools1)
-
-            ;; does not work with these planners, unsupported ":disjunctive-preconditions"
-            ; (or (and (delivered per2 food1) (delivered per3 food2))
-            ;     (and (delivered per2 food2) (delivered per3 food1))
-            ; )
-            
-            ;; rewrite the problem in this way:
-            (delivery_OR_refactored per2 per3 food1 food2)
+            (delivered per2 food1) 
+            (delivered per3 food2)
         )
     )
 
