@@ -10,7 +10,7 @@
 ; non supporta il formato suggerito dall extension PDDL, bisogna scrivere le conditions una alla volta con at start at and ecc....
 
 (define (domain domain4)
-    (:requirements :strips :typing :negative-preconditions :durative-actions)
+    (:requirements :strips :typing :negative-preconditions :durative-actions :disjunctive-preconditions)
     (:types
         person robotic_agent location box carrier supply - object
         food medicine tools - supply
@@ -21,6 +21,7 @@
         (located_at_supply ?s - supply ?l - location)
         (located_at_person ?p - person ?l - location)
         (located_at_carrier ?c - carrier ?l - location)
+
         (box_on_carrier ?b - box ?c - carrier)
         (box_loaded ?b - box)
         (box_is_empty ?b - box)
