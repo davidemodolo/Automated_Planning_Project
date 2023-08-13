@@ -39,9 +39,11 @@
         (and
             (delivered per1 med1)
             (delivered per1 tools1)
-            (delivered per2 food1) (delivered per3 food2)
+            
+            (delivered per2 food1) 
+            (delivered per3 food2)
 
-            ; does not work with tfd
+            ; does not work with these planners
             ; (or (and (delivered per2 food1) (delivered per3 food2))
             ;     (and (delivered per2 food2) (delivered per3 food1))
             ; )

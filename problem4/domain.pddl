@@ -5,12 +5,12 @@
 ; (robotic agents, carriers, boxes, etc.) and there's no overlap in the preconditions and effects of the actions.
 
 ; NOTE DI RIMOZIONE
-; tolto equality per vedere se era quello il problema, da riprovare
-; non supporta either, cambio con estensione 
-; non supporta il formato suggerito dall extension PDDL, bisogna scrivere le conditions una alla volta con at start at and ecc....
+; non supporta either, cambio con estensione di tutti i possibili predicati
+; non supporta il formato suggerito dall extension PDDL, bisogna scrivere le conditions una alla volta con at start at and ecc.. come specificato sulla documentazione https://planning.wiki/ref/pddl21/domain#durative-actions
+; optic planner non supporta i not nelle preconditions, mentre tfd si
 
 (define (domain domain4)
-    (:requirements :strips :typing :negative-preconditions :durative-actions :disjunctive-preconditions)
+    (:requirements :strips :typing :durative-actions :disjunctive-preconditions :equality :negative-preconditions)
     (:types
         person robotic_agent location box carrier supply - object
         food medicine tools - supply
@@ -46,6 +46,7 @@
         :condition (and 
                         (at start (located_at_robot ?r ?l1))
                         (over all (robot_has_no_carrier ?r)) ; does not change along the duration
+                        (over all (not (= ?l1 ?l2)))
         )
         :effect (and 
                     (at start (not (located_at_robot ?r ?l1)))
@@ -61,6 +62,7 @@
                         (at start (located_at_robot ?r ?l1))
                         (at start (located_at_carrier ?c ?l1))
                         (over all (robot_carrier_attached ?r ?c))
+                        (over all (not (= ?l1 ?l2)))
             )
         :effect (and 
                     (at start (not (located_at_robot ?r ?l1)))
