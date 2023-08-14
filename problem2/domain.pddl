@@ -1,7 +1,7 @@
 (define (domain domain2)
     (:requirements :strips :typing :equality :negative-preconditions :disjunctive-preconditions :conditional-effects :existential-preconditions :universal-preconditions)
     (:types
-        person robotic_agent location box carrier supply - object ; we added the object "carrier" as required by the second problem
+        person robotic_agent location box carrier supply - object
         food medicine tools - supply
     )
     (:predicates
