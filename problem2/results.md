@@ -4,7 +4,7 @@
 ### Machine setup:
 - Planner: LAMA
 - Command line ``lama domain.pddl problem.pddl``
-- Runned on Docker image from https://hub.docker.com/r/aiplanning/planutils
+- Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
 
 ### Solution found 
 

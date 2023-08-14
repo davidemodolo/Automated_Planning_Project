@@ -53,16 +53,15 @@
     ; attach a carrier to a robot
     (:action attach_carrier_to_robot
         :parameters (?r - robotic_agent ?l1 - location ?c - carrier)
-        :precondition (and (located_at ?r ?l1) (located_at ?c ?l1) (carrier_has_no_robot ?c) (robot_has_no_carrier ?r))
-        :effect (and (not (carrier_has_no_robot ?c)) (not (robot_has_no_carrier ?r)) (robot_carrier_attached ?r ?c) (carrier_has_no_boxes ?c)) ; assumption that the carrier is initially empty
+        :precondition (and (located_at ?r ?l1) (located_at ?c ?l1) (carrier_has_no_robot ?c) (robot_has_no_carrier ?r) (carrier_has_no_boxes ?c))
+        :effect (and (not (carrier_has_no_robot ?c)) (not (robot_has_no_carrier ?r)) (robot_carrier_attached ?r ?c)) 
     )
 
     ; detach a carrier from a robot
     (:action detach_carrier_from_robot
         :parameters (?r - robotic_agent ?l1 - location ?c - carrier)
         :precondition (and (located_at ?r ?l1) (robot_carrier_attached ?r ?c) (carrier_has_no_boxes ?c))
-        :effect (and (carrier_has_no_robot ?c) (robot_has_no_carrier ?r)
-            (not (robot_carrier_attached ?r ?c)) (not (carrier_has_four_boxes ?c)))
+        :effect (and (carrier_has_no_robot ?c) (robot_has_no_carrier ?r) (not (robot_carrier_attached ?r ?c)))
     )
 
     (:action load_box_on_carrier
@@ -73,7 +72,7 @@
             (located_at ?r ?l)
             (not (box_loaded ?b))
             (not (box_on_carrier ?b ?c))
-            (not (box_is_empty ?b))
+            ; (not (box_is_empty ?b))
             (or 
                 (carrier_has_no_boxes ?c)
                 (carrier_has_one_box ?c)
