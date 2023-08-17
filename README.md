@@ -2,10 +2,10 @@
 
 by [Davide Modolo](https://github.com/davidemodolo/) & [Francesco Laiti](https://github.com/laitifranz)
 
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) create PDDL HDDL 
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![PDDL](https://raw.githubusercontent.com/davidemodolo/PDDL_SVG_Icons/c978884225eca6e5e887515b6db818f94ac3cd0a/pddl.svg) ![HDDL](https://raw.githubusercontent.com/davidemodolo/PDDL_SVG_Icons/c978884225eca6e5e887515b6db818f94ac3cd0a/hddl.svg)
 # TODO
 - [x] Sistemare i files python nelle rispettive cartelle
-- [ ] Creare il readme di questa repo
+- [x] Creare il readme di questa repo
 - [ ] Pulizia della cartella problem3 con tutti i test effettuati
 - [ ] Guardare commenti problem3 in cima
 - [ ] Commentare codice bene e togliere cose commentate in italiano e in più
@@ -24,20 +24,36 @@ The main goals of this assignment are to model planning problems using PDDL/HDDL
 
 The scenario considered is inspired by an emergency services logistics problem. The objective is to use robotic agents to deliver boxes containing emergency supplies to injured individuals who are located in fixed positions.
 
+We used `planner.domains` API, `planutils` docker image, `PANDA` and `PlanSys2` to compute the plans.
+
 ### Problem 1
+
+A robotic agent can deliver one supply in one box at a time.
 
 ### Problem 2
 
+The number of boxes increased to 4 thanks to the ability of a robot to attach to a carrier. We created a version with the number coded as variable (using `:numeric-fluents`) and another version with innested `when` statements.
+
 ### Problem 3
+
+Created HDDL files to implement hierarchical planning.
 
 ### Problem 4
 
+Added durative actions.
+
 ### Problem 5
+
+Problem 4 but implemented with PlanSys2 and fake actions.
 
 ## Our results and thought
 
+Our resulting plans can be found in the markdown files in each folder.
+
 ## Directory content
+
 Created with `tree /F` command
+
 ```bash
 │   .gitignore
 │   assignment.pdf
