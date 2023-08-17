@@ -14,9 +14,8 @@ def resolveWithAPI(domain, problem):
             except:
                  return resp['result']['error']
 
-prob = "2"
-domain = f"problem{prob}NF/domain.pddl"
-problem = f"problem{prob}NF/problem.pddl"
+domain = f"domain.pddl"
+problem = f"problem.pddl"
 
 domain = open(domain, 'r').read()
 problem = open(problem, 'r').read()
