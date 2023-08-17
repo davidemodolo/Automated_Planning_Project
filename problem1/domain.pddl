@@ -1,3 +1,5 @@
+; PROBLEM DESCRIPTION from the assignment
+
 ; number of persons known a priori and not moving have been injured
 ; orchestrate the activities of a set of different robotic agents to deliver boxes containing emergency supplies to each person
 
