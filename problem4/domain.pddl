@@ -33,7 +33,7 @@
     
         (delivered ?p - person ?s - supply)
 
-        (delivery_OR_refactored ?p1 ?p2 ?food1 ?food2)
+        (delivery_OR_refactored ?p1 ?p2 - person ?food1 ?food2 - food)
     )
     (:functions
         (num_boxes ?c - carrier)

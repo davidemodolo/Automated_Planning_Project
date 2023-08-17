@@ -5,7 +5,7 @@
 - Planner: tfd
 - Command line ``tfd domain.pddl problem.pddl``
 - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
-> We tried also optic but it does not support negative-preconditions.
+> We tried also optic but it does not support negative-preconditions. Please use the domain and problem inside no_negative_preconditions to use different planners.
 
 ### Solution found 
 
