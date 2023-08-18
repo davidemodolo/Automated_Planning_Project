@@ -6,7 +6,7 @@ by [Davide Modolo](https://github.com/davidemodolo/) & [Francesco Laiti](https:/
 # TODO
 - [x] Sistemare i files python nelle rispettive cartelle
 - [x] Creare il readme di questa repo
-- [ ] Pulizia della cartella problem3 con tutti i test effettuati
+- [x] Pulizia della cartella problem3 con tutti i test effettuati
 - [ ] Guardare commenti problem3 in cima
 - [ ] Commentare codice bene e togliere cose commentate in italiano e in più
 - [ ] Aggiornare tree
