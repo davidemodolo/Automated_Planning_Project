@@ -20,4 +20,6 @@ problem = f"problem.pddl"
 domain = open(domain, 'r').read()
 problem = open(problem, 'r').read()
 steps = resolveWithAPI(domain, problem)
-print(steps)
+print("> Plan length: " + str(len(steps.split("\n"))) + " steps.")
+for i, step in enumerate(steps.split("\n")):
+    print(f"{i+1}. {step}")

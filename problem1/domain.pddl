@@ -25,7 +25,7 @@
     )
 
     (:predicates
-        (located_at ?x - (either robotic_agent box supply) ?loc - location)
+        (located_at ?x - (either robotic_agent box supply person) ?loc - location)
         
         (robot_has_box ?r - robotic_agent ?b - box)
         (robot_has_no_box ?r - robotic_agent)
