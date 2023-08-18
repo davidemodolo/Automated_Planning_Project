@@ -9,6 +9,7 @@ by [Davide Modolo](https://github.com/davidemodolo/) & [Francesco Laiti](https:/
 - [ ] Pulizia della cartella problem3 con tutti i test effettuati
 - [ ] Guardare commenti problem3 in cima
 - [ ] Commentare codice bene e togliere cose commentate in italiano e in più
+- [ ] Aggiornare tree
 
 # PDDL/HDDL for Emergency Services Logistics Problems
 
