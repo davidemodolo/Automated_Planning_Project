@@ -1,11 +1,11 @@
 ; NOTE
-; Rispetto a prima si è dovuto rimuovere either perché non supportato dal planner
-; doppia modalità per move_robot, che per una task ho due modalità a seconda della condizione del robot, se con carrello o no
+; [REPORT] Rispetto a prima si è dovuto rimuovere either perché non supportato dal planner
+; [REPORT] doppia modalità per move_robot, che per una task ho due modalità a seconda della condizione del robot, se con carrello o no
 
 ; DA RIVEDERE
-; si puo usare ricorsività dei tasks?
-; da sistemare la visualizzazione del risultato finale che viene mostrato con disjunction ecc...
-; non trova la soluzione ottimale... abbastanza hardcodati come tasks, da capire se ci sono high-level tasks migliori
+; [OK] si puo usare ricorsività dei tasks?
+; [OK] da sistemare la visualizzazione del risultato finale che viene mostrato con disjunction ecc...
+; [OK] non trova la soluzione ottimale... abbastanza hardcodati come tasks, da capire se ci sono high-level tasks migliori
 
 (define (domain domain3)
     (:requirements :strips :typing :hierachie :disjunctive-preconditions)

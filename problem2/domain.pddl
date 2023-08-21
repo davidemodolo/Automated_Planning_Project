@@ -83,7 +83,7 @@
             (box_on_carrier ?b ?c)
             (box_loaded ?b)
             (not (located_at ?b ?l))
-            (when (carrier_has_no_boxes ?c)
+            (when (carrier_has_no_boxes ?c) ; all this when conditions are used similarly to if-else statements
                 (and
                     (not (carrier_has_no_boxes ?c))
                     (carrier_has_one_box ?c)))
