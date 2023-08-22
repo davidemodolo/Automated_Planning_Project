@@ -34,8 +34,10 @@ Created with `tree /F` command
 
 ```bash
 │   .gitignore
+│   APTP_report.pdf
 │   assignment.pdf
 │   README.md
+│   total_results.pdf
 │
 ├───problem1
 │       domain.pddl
@@ -46,7 +48,7 @@ Created with `tree /F` command
 ├───problem2
 │   │   domain.pddl
 │   │   problem.pddl
-│   │   problemExtra_3boxes.pddl
+│   │   problem_extra_3boxes.pddl
 │   │   results.md
 │   │
 │   └───numeric_fluents
@@ -56,54 +58,64 @@ Created with `tree /F` command
 │
 ├───problem3
 │       domain.hddl
-│       domainTMP.hddl
-│       domain_solution.hddl
 │       PANDA.jar
 │       problem.hddl
-│       problemTMP.hddl
-│       problem_solution.hddl
 │       results.md
 │
 ├───problem4
 │   │   domain.pddl
 │   │   problem.pddl
-│   │   problemExtra_3boxes.pddl
+│   │   problem_extra_3boxes.pddl
 │   │   results.md
 │   │
 │   └───no_negative_preconditions
-│           domain_no_negative.pddl
-│           problem_no_negative.pddl
+│           domain.pddl
+│           problem.pddl
 │
-└───problem5
-    │   Dockerfile
-    │   setup.md
+├───problem5
+│   │   Dockerfile
+│   │   setup.md
+│   │
+│   └───plansys_problem5
+│       │   CMakeLists.txt
+│       │   launch_terminal1.sh
+│       │   launch_terminal2.sh
+│       │   package.xml
+│       │   results.md
+│       │
+│       ├───launch
+│       │       plansys2_problem5_launch.py
+│       │       problem
+│       │
+│       ├───pddl
+│       │       domain.pddl
+│       │
+│       └───src
+│               attach_carrier_to_robot_action_node.cpp
+│               delivery_or_refactored_possible_action1_action_node.cpp
+│               delivery_or_refactored_possible_action2_action_node.cpp
+│               deliver_action_node.cpp
+│               detach_carrier_from_robot_action_node.cpp
+│               fill_box_action_node.cpp
+│               load_box_on_carrier_action_node.cpp
+│               move_robot_action_node.cpp
+│               move_robot_with_carrier_action_node.cpp
+│               unload_box_from_carrier_action_node.cpp
+│
+└───screenshots
+    │   prob1_lama.png
+    │   prob2_lama_3boxes.png
+    │   prob2_lama_4boxes.png
+    │   prob3_PANDA_actions.png
+    │   prob4_optics_no_negative.png
+    │   prob4_tfd_3boxes.png
+    │   prob4_tfd_4boxes.png
     │
-    └───plansys_problem5
-        │   CMakeLists.txt
-        │   launch_terminal1.sh
-        │   launch_terminal2.sh
-        │   package.xml
-        │   results.md
-        │
-        ├───launch
-        │       plansys2_problem5_launch.py
-        │       problem
-        │
-        ├───pddl
-        │       domain.pddl
-        │
-        └───src
-                attach_carrier_to_robot_action_node.cpp
-                delivery_or_refactored_possible_action1_action_node.cpp
-                delivery_or_refactored_possible_action2_action_node.cpp
-                deliver_action_node.cpp
-                detach_carrier_from_robot_action_node.cpp
-                fill_box_action_node.cpp
-                load_box_on_carrier_action_node.cpp
-                move_robot_action_node.cpp
-                move_robot_with_carrier_action_node.cpp
-                unload_box_from_carrier_action_node.cpp
-
+    └───types
+            prob1_domain.png
+            prob1_problem.png
+            prob2_domain.png
+            prob2_problem.png
 ```
 
 # Problem 1
