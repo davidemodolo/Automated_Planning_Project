@@ -1,6 +1,7 @@
 (define (problem problem1)
     (:domain domain1)
 
+    ; --- OBJECTS ---
     (:objects
         ; as required, we have the depot where everything (a part from the injured people) is located
         depot location1 location2 location3 - location
@@ -18,8 +19,9 @@
         robot1 - robotic_agent
     )
 
+    ; --- INITIAL STATE ---
     (:init
-        ; Initial locations of people
+        ; initial locations of people
         (located_at person1 location2)
         (located_at person2 location3)
         ; depot is the initial location of the robot and the supplies
@@ -30,7 +32,7 @@
         (located_at tools1 depot)
         (located_at box1 depot)
         (located_at box2 depot)
-        ; Initial state of objects
+        ; initial state of objects
         (box_is_empty box1)
         (box_is_empty box2)
         (robot_has_no_box robot1)
@@ -38,10 +40,11 @@
         ; closed world assumptions
     )
     
+    ; --- GOAL ---
     (:goal
         (and
             ; as specified in the assignment, it doesn't matter whether the food1 is delivered to person1 or person2 and the same for food2
-            (or (and (delivered person1 food1) (delivered person2 food2)) (and (delivered person1 food2) (delivered person2 food1))) ;remark note on assignment
+            (or (and (delivered person1 food1) (delivered person2 food2)) (and (delivered person1 food2) (delivered person2 food1))) ; satisfy remark note of the assignment
             (delivered person2 tools1)
             (delivered person2 medicine1)
         )

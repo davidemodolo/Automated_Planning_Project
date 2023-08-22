@@ -1,12 +1,14 @@
 (define (domain domain1)
     (:requirements :strips :typing :equality :negative-preconditions :disjunctive-preconditions)
+
+    ; --- TYPES ---
     (:types
-        person robotic_agent location box - object
-        ; declare the types of the supplies
+        person robotic_agent location box - object ; declare the types of the supplies
         supply - object
         food medicine tools - supply ; in case we want to add more supplies, we can just add them here
     )
 
+    ; --- PREDICATES ---
     (:predicates
         (located_at ?x - (either robotic_agent box supply person) ?loc - location)
         
@@ -19,6 +21,7 @@
         (delivered ?p - person ?s - supply)
     )
 
+    ; --- ACTIONS ---
     ; move robot to a location, if it is not already there
     (:action move_robot
         :parameters (?r - robotic_agent ?l1 ?l2 - location)
@@ -46,6 +49,7 @@
         :precondition (and (located_at ?r ?l1) (located_at ?s ?l1) (robot_has_box ?r ?b)  (box_is_empty ?b))
         :effect (and (not (located_at ?s ?l1)) (box_with_supply ?b ?s) (not (box_is_empty ?b)))
     )
+    
     ; empty a box by leaving the content to the current location
     (:action empty_box ; not used action, here in the case we want to empty a box that is somehow filled with a supply we don't need to deliver anymore
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply)

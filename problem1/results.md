@@ -1,13 +1,16 @@
 # Problem 1
 
-## Results
+### Machine setup:
+1. Planner: LAMA 
+    - Command line: ``lama domain.pddl problem.pddl``
+    - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
+2. Planner: online solver
+    - Command line: ``python runnerSolverAPI.py``
+    - Python is required
+
+## Results :memo:
 
 Both planners returned the same plan.
-
-### Machine setup:
-- Planner: LAMA 
-- Command line: ``lama domain.pddl problem.pddl``
-- Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
 
 ### Solutions found 
 
