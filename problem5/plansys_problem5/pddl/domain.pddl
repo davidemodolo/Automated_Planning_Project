@@ -1,3 +1,8 @@
+; -----------------------------------------------------------------------------------
+; Default planner is POPF, and does not support :negative-preconditions, 
+; we used domain and problem as defined in problem4/no_negative_preconditions folder.
+; -----------------------------------------------------------------------------------
+
 (define (domain domain5)
     (:requirements :strips :typing :adl :fluents :durative-actions)
     (:types
