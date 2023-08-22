@@ -1,6 +1,7 @@
 (define (problem problem3)
     (:domain domain3)
 
+    ; --- OBJECTS ---
     (:objects
         depot location1 location2 location3 - location
         carrier1 - carrier
@@ -12,13 +13,14 @@
         per1 per2 per3 - person
     )
 
+    ; --- GOAL ---
     (:htn
         :parameters()
         :subtasks (and  
             (task0 (T_deliver_supply per1 med1))
             (task1 (T_deliver_supply per2 food1)) 
             (task2 (T_deliver_supply per3 food2)) ; takes long time to find a plan
-            (task3 (T_deliver_supply per1 tools1))
+            (task3 (T_deliver_supply per1 tools1)) ; takes long time to find a plan
         )
         :ordering (and  
             (task0 < task1)
@@ -26,6 +28,8 @@
             (task2 < task3)
 		)
     )
+
+    ; --- INITIAL STATE ---
     (:init
         (located_at_robot robot1 depot)
         (located_at_person per1 location1)
@@ -50,36 +54,3 @@
         ; closed world assumptions
     )
 )
-
-
-
-; FUNZIONA
-; :subtasks(and (task0 (T_move_robot robot1 depot location1)))
-; :subtasks(and 
-;     (task0 (T_fill_box robot1 box1 med1))
-;     (task1 (T_attach_carrier_to_robot robot1 carrier1))
-;     (task2 (T_detach_carrier_to_robot robot1 carrier1))
-;     (task3 (T_move_robot robot1 depot location1))
-; )
-; :subtasks(and 
-;     (task0 (T_fill_box robot1 box1 med1))
-;     (task1 (T_attach_carrier_to_robot robot1 carrier1))
-;     (task2 (T_load_box_on_carrier robot1 box1))
-;     (task3 (T_move_robot robot1 depot location1))
-;     (task4 (T_unload_box_from_carrier robot1 box1))
-; )
-; :subtasks(and 
-;     (task0 (T_fill_box robot1 box1 med1))
-;     (task1 (T_attach_carrier_to_robot robot1 carrier1))
-;     (task2 (T_load_box_on_carrier robot1 box1))
-;     (task3 (T_move_robot robot1 depot location1))
-;     (task4 (T_unload_box_from_carrier robot1 box1))
-;     (task5 (T_deliver per1 med1))
-; )
-; :ordering (and 
-;     (task0 < task1)
-;     (task1 < task2)
-;     (task2 < task3)
-;     (task3 < task4)
-;     (task4 < task5)
-; )
