@@ -28,30 +28,6 @@ The scenario considered is inspired by an emergency services logistics problem. 
 
 We used `planner.domains` API, `planutils` docker image, `PANDA` and `PlanSys2` to compute the plans.
 
-### Problem 1
-
-A robotic agent can deliver one supply in one box at a time.
-
-### Problem 2
-
-The number of boxes increased to 4 thanks to the ability of a robot to attach to a carrier. We created a version with the number coded as variable (using `:numeric-fluents`) and another version with innested `when` statements.
-
-### Problem 3
-
-Created HDDL files to implement hierarchical planning.
-
-### Problem 4
-
-Added durative actions.
-
-### Problem 5
-
-Problem 4 but implemented with PlanSys2 and fake actions.
-
-## Our results and thought
-
-Our resulting plans can be found in the markdown files in each folder.
-
 ## Directory content
 
 Created with `tree /F` command
@@ -128,4 +104,563 @@ Created with `tree /F` command
                 move_robot_with_carrier_action_node.cpp
                 unload_box_from_carrier_action_node.cpp
 
+```
+
+# Problem 1
+
+### Machine setup:
+
+1. Planner: LAMA
+  - Command line: ``lama domain.pddl problem.pddl``
+  - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
+2. Planner: online solver
+  - Command line: ``python runnerSolverAPI.py``
+  - Python is required
+
+## Results :memo:
+
+Both planners returned the same plan.
+
+### Solutions found
+
+#### lama
+
+> Plan length: 19 steps.
+
+```bash
+1. take_box robot1 depot box1 (1)
+2. fill_box robot1 depot box1 food1 (1)
+3. move_robot robot1 depot location2 (1)
+4. deliver robot1 location2 person1 food1 box1 (1)
+5. move_robot robot1 location2 depot (1)
+6. take_box robot1 depot box2 (1)
+7. fill_box robot1 depot box2 food2 (1)
+8. move_robot robot1 depot location3 (1)
+9. deliver robot1 location3 person2 food2 box2 (1)
+10. take_box robot1 location3 box2 (1)
+11. move_robot robot1 location3 depot (1)
+12. fill_box robot1 depot box2 medicine1 (1)
+13. move_robot robot1 depot location3 (1)
+14. deliver robot1 location3 person2 medicine1 box2 (1)
+15. take_box robot1 location3 box2 (1)
+16. move_robot robot1 location3 depot (1)
+17. fill_box robot1 depot box2 tools1 (1)
+18. move_robot robot1 depot location3 (1)
+19. deliver robot1 location3 person2 tools1 box2 (1)
+```
+
+#### planning.domains
+
+> Plan length: 19 steps.
+
+```bash
+1. (take_box robot1 depot box2)
+2. (fill_box robot1 depot box2 food1)
+3. (move_robot robot1 depot location3)
+4. (deliver robot1 location3 person2 food1 box2)
+5. (take_box robot1 location3 box2)
+6. (move_robot robot1 location3 depot)
+7. (fill_box robot1 depot box2 food2)
+8. (move_robot robot1 depot location2)
+9. (deliver robot1 location2 person1 food2 box2)
+10. (take_box robot1 location2 box2)
+11. (move_robot robot1 location2 depot)
+12. (fill_box robot1 depot box2 medicine1)
+13. (move_robot robot1 depot location3)
+14. (deliver robot1 location3 person2 medicine1 box2)
+15. (take_box robot1 location3 box2)
+16. (move_robot robot1 location3 depot)
+17. (fill_box robot1 depot box2 tools1)
+18. (move_robot robot1 depot location3)
+19. (deliver robot1 location3 person2 tools1 box2)
+```
+
+# Problem 2
+
+### Machine setup:
+
+1. Planner: LAMA
+  - Command line ``lama domain.pddl problem.pddl``
+  - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
+2. Planner: online solver
+  - Command line: ``python runnerSolverAPI.py``
+  - Python is required. To run it move to _numeric_fluents_ folder
+
+## Results :memo:
+
+### Solutions found
+
+#### lama
+
+> Plan length: 20 steps.
+
+```bash
+1. attach_carrier_to_robot robot1 depot carrier1 (1)
+2. fill_box robot1 depot box1 med1 (1)
+3. load_box_on_carrier carrier1 box1 depot robot1 (1)
+4. fill_box robot1 depot box2 tools1 (1)
+5. fill_box robot1 depot box4 food1 (1)
+6. fill_box robot1 depot box3 food2 (1)
+7. load_box_on_carrier carrier1 box2 depot robot1 (1)
+8. load_box_on_carrier carrier1 box3 depot robot1 (1)
+9. load_box_on_carrier carrier1 box4 depot robot1 (1)
+10. move_robot_with_carrier robot1 carrier1 depot location1 (1)
+11. unload_box_from_carrier carrier1 box1 location1 robot1 (1)
+12. unload_box_from_carrier carrier1 box2 location1 robot1 (1)
+13. deliver robot1 location1 per1 med1 box1 (1)
+14. deliver robot1 location1 per1 tools1 box2 (1)
+15. move_robot_with_carrier robot1 carrier1 location1 location2 (1)
+16. unload_box_from_carrier carrier1 box3 location2 robot1 (1)
+17. deliver robot1 location2 per2 food2 box3 (1)
+18. move_robot_with_carrier robot1 carrier1 location2 location3 (1)
+19. unload_box_from_carrier carrier1 box4 location3 robot1 (1)
+20. deliver robot1 location3 per3 food1 box4 (1)
+```
+
+#### extra with 3 boxes using lama planner
+
+> Plan length: 23 steps.
+
+```bash
+1. attach_carrier_to_robot robot1 depot carrier1 (1)
+2. fill_box robot1 depot box1 med1 (1)
+3. load_box_on_carrier carrier1 box1 depot robot1 (1)
+4. fill_box robot1 depot box2 food1 (1)
+5. fill_box robot1 depot box3 tools1 (1)
+6. load_box_on_carrier carrier1 box2 depot robot1 (1)
+7. load_box_on_carrier carrier1 box3 depot robot1 (1)
+8. move_robot_with_carrier robot1 carrier1 depot location1 (1)
+9. unload_box_from_carrier carrier1 box3 location1 robot1 (1)
+10. deliver robot1 location1 per1 tools1 box3 (1)
+11. unload_box_from_carrier carrier1 box1 location1 robot1 (1)
+12. deliver robot1 location1 per1 med1 box1 (1)
+13. move_robot_with_carrier robot1 carrier1 location1 location2 (1)
+14. unload_box_from_carrier carrier1 box2 location2 robot1 (1)
+15. deliver robot1 location2 per2 food1 box2 (1)
+16. load_box_on_carrier carrier1 box2 location2 robot1 (1)
+17. move_robot_with_carrier robot1 carrier1 location2 depot (1)
+18. unload_box_from_carrier carrier1 box2 depot robot1 (1)
+19. fill_box robot1 depot box2 food2 (1)
+20. load_box_on_carrier carrier1 box2 depot robot1 (1)
+21. move_robot_with_carrier robot1 carrier1 depot location3 (1)
+22. unload_box_from_carrier carrier1 box2 location3 robot1 (1)
+23. deliver robot1 location3 per3 food2 box2 (1)
+```
+
+#### numeric fluents
+
+Using `planner.domains` planner.
+
+> Plan length: 28 steps.
+
+```bash
+1. (move_robot robot1 location0 location1)
+2. (attach_carrier_to_robot robot1 location1 carrier1)
+3. (move_robot_with_carrier robot1 location1 location0 carrier1)
+4. (fill_box robot1 location0 box1 med1)
+5. (fill_box robot1 location0 box4 food1)
+6. (fill_box robot1 location0 box3 food2)
+7. (fill_box robot1 location0 box2 tools1)
+8. (load_box_on_carrier carrier1 box3 location0 robot1)
+9. (move_robot_with_carrier robot1 location0 location2 carrier1)
+10. (unload_box_from_carrier carrier1 box3 location2 robot1)
+11. (move_robot_with_carrier robot1 location2 location0 carrier1)
+12. (load_box_on_carrier carrier1 box4 location0 robot1)
+13. (move_robot_with_carrier robot1 location0 location3 carrier1)
+14. (unload_box_from_carrier carrier1 box4 location3 robot1)
+15. (move_robot_with_carrier robot1 location3 location0 carrier1)
+16. (load_box_on_carrier carrier1 box1 location0 robot1)
+17. (move_robot_with_carrier robot1 location0 location3 carrier1)
+18. (deliver robot1 location3 per3 food1 box4)
+19. (move_robot_with_carrier robot1 location3 location2 carrier1)
+20. (deliver robot1 location2 per2 food2 box3)
+21. (move_robot_with_carrier robot1 location2 location1 carrier1)
+22. (unload_box_from_carrier carrier1 box1 location1 robot1)
+23. (deliver robot1 location1 per1 med1 box1)
+24. (move_robot_with_carrier robot1 location1 location0 carrier1)
+25. (load_box_on_carrier carrier1 box2 location0 robot1)
+26. (move_robot_with_carrier robot1 location0 location1 carrier1)
+27. (unload_box_from_carrier carrier1 box2 location1 robot1)
+28. (deliver robot1 location1 per1 tools1 box2)
+```
+
+# Problem 3
+
+### Machine setup:
+
+- HTN Planner: PANDA
+  
+  - Available at:
+    - [Resource](https://www.uni-ulm.de/fileadmin/website_uni_ulm/iui.inst.090/panda/PANDA.jar) from the official website;
+    - [PANDA.jar](PANDA.jar) file inside this folder.
+- Command line ``java -jar PANDA.jar -parser hddl domain.hddl problem.hddl``
+  
+- Run on Docker image ``docker pull openjdk:8u342-jre``
+  
+  > (why version 8? the authors recommend version 8 to build the planner. Reference https://github.com/galvusdamor/panda3core)
+  
+
+## Results :memo:
+
+### Solution found
+
+> Plan length: 26 actions.
+
+#### Actions
+
+```bash
+SOLUTION SEQUENCE
+0: attach_carrier_to_robot(robot1,depot,carrier1)
+1: fill_box(robot1,depot,box2,med1)
+2: load_box_on_carrier__DISJUNCT-0__CONSEQUENT____ANTECEDENT__ANTECEDENT__ANTECEDENT(carrier1,box2,depot,robot1)
+3: move_robot_with_carrier(robot1,carrier1,depot,location1)
+4: unload_box_from_carrier__CONSEQUENT____ANTECEDENT__ANTECEDENT__ANTECEDENT(carrier1,box2,location1,robot1)
+5: deliver(robot1,location1,per1,med1,box2)
+6: load_box_on_carrier__DISJUNCT-0__CONSEQUENT____ANTECEDENT__ANTECEDENT__ANTECEDENT(carrier1,box2,location1,robot1)
+7: move_robot_with_carrier(robot1,carrier1,location1,depot)
+8: fill_box(robot1,depot,box3,food1)
+9: load_box_on_carrier__DISJUNCT-1__ANTECEDENT__CONSEQUENT____ANTECEDENT__ANTECEDENT(carrier1,box3,depot,robot1)
+10: move_robot_with_carrier(robot1,carrier1,depot,location2)
+11: unload_box_from_carrier__ANTECEDENT__CONSEQUENT____ANTECEDENT__ANTECEDENT(carrier1,box3,location2,robot1)
+12: deliver(robot1,location2,per2,food1,box3)
+13: load_box_on_carrier__DISJUNCT-1__ANTECEDENT__CONSEQUENT____ANTECEDENT__ANTECEDENT(carrier1,box3,location2,robot1)
+14: move_robot_with_carrier(robot1,carrier1,location2,depot)
+15: fill_box(robot1,depot,box4,food2)
+16: load_box_on_carrier__DISJUNCT-2__ANTECEDENT__ANTECEDENT__CONSEQUENT____ANTECEDENT(carrier1,box4,depot,robot1)
+17: move_robot_with_carrier(robot1,carrier1,depot,location3)
+18: unload_box_from_carrier__ANTECEDENT__ANTECEDENT__CONSEQUENT____ANTECEDENT(carrier1,box4,location3,robot1)
+19: deliver(robot1,location3,per3,food2,box4)
+20: load_box_on_carrier__DISJUNCT-2__ANTECEDENT__ANTECEDENT__CONSEQUENT____ANTECEDENT(carrier1,box4,location3,robot1)
+21: move_robot_with_carrier(robot1,carrier1,location3,depot)
+22: fill_box(robot1,depot,box1,tools1)
+23: load_box_on_carrier__DISJUNCT-3__ANTECEDENT__ANTECEDENT__ANTECEDENT__CONSEQUENT__(carrier1,box1,depot,robot1)
+24: move_robot_with_carrier(robot1,carrier1,depot,location1)
+25: unload_box_from_carrier__ANTECEDENT__ANTECEDENT__ANTECEDENT__CONSEQUENT__(carrier1,box1,location1,robot1)
+26: deliver(robot1,location1,per1,tools1,box1)
+```
+
+#### Methods
+
+```bash
+Found a solution:
+__top_4 @ __artificialTopCompilation__top_4
+M_deliver_supply_but_first_attach_carrier[?l1=depot,?p=per1,?b=box1,?r=robot1,?l2=depot,?s=med1,?c=carrier1] @ T_deliver_supply[per1,med1]
+M_attach_carrier_to_robot[?l=depot,?c=carrier1,?r=robot1] @ T_attach_carrier_to_robot[robot1,carrier1]
+attach_carrier_to_robot[robot1,depot,carrier1]
+M_deliver_supply_with_already_carrier[?p=per1,?r=robot1,?s=med1,?c=carrier1] @ T_deliver_supply[per1,med1]
+M_prepare_box[?c=carrier1,?l=depot,?s=med1,?r=robot1,?b=box2] @ T_prepare_box[robot1,med1]
+fill_box[robot1,depot,box2,med1]
+M_load_box_on_carrier[?l=depot,?b=box2,?c=carrier1,?r=robot1] @ T_load_box_on_carrier[robot1,box2]
+M-load_box_on_carrier__DISJUNCT-0[?r=robot1,?c=carrier1,?l=depot,?b=box2] @ load_box_on_carrier[carrier1,box2,depot,robot1]
+M-load_box_on_carrier__DISJUNCT-0__CONSEQUENT__[?r=robot1,?c=carrier1,?l=depot,?b=box2] @ load_box_on_carrier__DISJUNCT-0[carrier1,box2,depot,robot1]
+M-load_box_on_carrier__DISJUNCT-0__CONSEQUENT____ANTECEDENT[?r=robot1,?c=carrier1,?l=depot,?b=box2] @ load_box_on_carrier__DISJUNCT-0__CONSEQUENT__[carrier1,box2,depot,robot1]
+M-load_box_on_carrier__DISJUNCT-0__CONSEQUENT____ANTECEDENT__ANTECEDENT[?r=robot1,?c=carrier1,?l=depot,?b=box2] @ load_box_on_carrier__DISJUNCT-0__CONSEQUENT____ANTECEDENT[carrier1,box2,depot,robot1]
+M-load_box_on_carrier__DISJUNCT-0__CONSEQUENT____ANTECEDENT__ANTECEDENT__ANTECEDENT[?r=robot1,?c=carrier1,?l=depot,?b=box2] @ load_box_on_carrier__DISJUNCT-0__CONSEQUENT____ANTECEDENT__ANTECEDENT[carrier1,box2,depot,robot1]
+load_box_on_carrier__DISJUNCT-0__CONSEQUENT____ANTECEDENT__ANTECEDENT__ANTECEDENT[carrier1,box2,depot,robot1]
+M_deliver_supply_with_already_carrier_M_deliver_supply_with_already_carrier_3[?r=robot1,?l1=depot,?l2=location1] @ T_move_robot_M_deliver_supply_with_already_carrier_3[robot1]
+M_move_robot_with_carrier[?l2=location1,?r=robot1,?l1=depot,?c=carrier1] @ T_move_robot[robot1,depot,location1]
+move_robot_with_carrier[robot1,carrier1,depot,location1]
+M_deliver_supply_with_already_carrier_M_deliver_supply_with_already_carrier_4[?r=robot1,?b=box2] @ T_unload_box_from_carrier_M_deliver_supply_with_already_carrier_4[robot1]
+M_unload_box_from_carrier[?r=robot1,?l=location1,?b=box2,?c=carrier1] @ T_unload_box_from_carrier[robot1,box2]
+M-unload_box_from_carrier__CONSEQUENT__[?r=robot1,?c=carrier1,?l=location1,?b=box2] @ unload_box_from_carrier[carrier1,box2,location1,robot1]
+M-unload_box_from_carrier__CONSEQUENT____ANTECEDENT[?r=robot1,?c=carrier1,?l=location1,?b=box2] @ unload_box_from_carrier__CONSEQUENT__[carrier1,box2,location1,robot1]
+M-unload_box_from_carrier__CONSEQUENT____ANTECEDENT__ANTECEDENT[?r=robot1,?c=carrier1,?l=location1,?b=box2] @ unload_box_from_carrier__CONSEQUENT____ANTECEDENT[carrier1,box2,location1,robot1]
+M-unload_box_from_carrier__CONSEQUENT____ANTECEDENT__ANTECEDENT__ANTECEDENT[?r=robot1,?c=carrier1,?l=location1,?b=box2] @ unload_box_from_carrier__CONSEQUENT____ANTECEDENT__ANTECEDENT[carrier1,box2,location1,robot1]
+unload_box_from_carrier__CONSEQUENT____ANTECEDENT__ANTECEDENT__ANTECEDENT[carrier1,box2,location1,robot1]
+M_deliver[?l=location1,?s=med1,?b=box2,?p=per1,?r=robot1] @ T_deliver[per1,med1]
+deliver[robot1,location1,per1,med1,box2]
+M_deliver_supply_by_loading_supply_from_depot[?l1=depot,?b=box1,?c=carrier1,?p=per2,?l2=location3,?s=food1,?r=robot1] @ T_deliver_supply[per2,food1]
+M_return_to_depot_M_return_to_depot_2[?r=robot1,?b=box2] @ T_load_box_on_carrier_M_return_to_depot_2[robot1]
+M_load_box_on_carrier[?l=location1,?b=box2,?c=carrier1,?r=robot1] @ T_load_box_on_carrier[robot1,box2]
+M-load_box_on_carrier__DISJUNCT-0[?r=robot1,?c=carrier1,?l=location1,?b=box2] @ load_box_on_carrier[carrier1,box2,location1,robot1]
+M-load_box_on_carrier__DISJUNCT-0__CONSEQUENT__[?r=robot1,?c=carrier1,?l=location1,?b=box2] @ load_box_on_carrier__DISJUNCT-0[carrier1,box2,location1,robot1]
+M-load_box_on_carrier__DISJUNCT-0__CONSEQUENT____ANTECEDENT[?r=robot1,?c=carrier1,?l=location1,?b=box2] @ load_box_on_carrier__DISJUNCT-0__CONSEQUENT__[carrier1,box2,location1,robot1]
+M-load_box_on_carrier__DISJUNCT-0__CONSEQUENT____ANTECEDENT__ANTECEDENT[?r=robot1,?c=carrier1,?l=location1,?b=box2] @ load_box_on_carrier__DISJUNCT-0__CONSEQUENT____ANTECEDENT[carrier1,box2,location1,robot1]
+M-load_box_on_carrier__DISJUNCT-0__CONSEQUENT____ANTECEDENT__ANTECEDENT__ANTECEDENT[?r=robot1,?c=carrier1,?l=location1,?b=box2] @ load_box_on_carrier__DISJUNCT-0__CONSEQUENT____ANTECEDENT__ANTECEDENT[carrier1,box2,location1,robot1]
+load_box_on_carrier__DISJUNCT-0__CONSEQUENT____ANTECEDENT__ANTECEDENT__ANTECEDENT[carrier1,box2,location1,robot1]
+M_return_to_depot_M_return_to_depot_3[?r=robot1,?l2=depot,?l1=location1] @ T_move_robot_M_return_to_depot_3[robot1]
+M_move_robot_with_carrier[?l2=depot,?r=robot1,?l1=location1,?c=carrier1] @ T_move_robot[robot1,location1,depot]
+move_robot_with_carrier[robot1,carrier1,location1,depot]
+M_deliver_supply_with_already_carrier[?p=per2,?r=robot1,?s=food1,?c=carrier1] @ T_deliver_supply[per2,food1]
+M_prepare_box[?c=carrier1,?l=location2,?s=food1,?r=robot1,?b=box3] @ T_prepare_box[robot1,food1]
+fill_box[robot1,depot,box3,food1]
+M_load_box_on_carrier[?l=depot,?b=box3,?c=carrier1,?r=robot1] @ T_load_box_on_carrier[robot1,box3]
+M-load_box_on_carrier__DISJUNCT-1[?r=robot1,?c=carrier1,?l=depot,?b=box3] @ load_box_on_carrier[carrier1,box3,depot,robot1]
+M-load_box_on_carrier__DISJUNCT-1__ANTECEDENT[?r=robot1,?c=carrier1,?l=depot,?b=box3] @ load_box_on_carrier__DISJUNCT-1[carrier1,box3,depot,robot1]
+M-load_box_on_carrier__DISJUNCT-1__ANTECEDENT__CONSEQUENT__[?r=robot1,?c=carrier1,?l=depot,?b=box3] @ load_box_on_carrier__DISJUNCT-1__ANTECEDENT[carrier1,box3,depot,robot1]
+M-load_box_on_carrier__DISJUNCT-1__ANTECEDENT__CONSEQUENT____ANTECEDENT[?r=robot1,?c=carrier1,?l=depot,?b=box3] @ load_box_on_carrier__DISJUNCT-1__ANTECEDENT__CONSEQUENT__[carrier1,box3,depot,robot1]
+M-load_box_on_carrier__DISJUNCT-1__ANTECEDENT__CONSEQUENT____ANTECEDENT__ANTECEDENT[?r=robot1,?c=carrier1,?l=depot,?b=box3] @ load_box_on_carrier__DISJUNCT-1__ANTECEDENT__CONSEQUENT____ANTECEDENT[carrier1,box3,depot,robot1]
+load_box_on_carrier__DISJUNCT-1__ANTECEDENT__CONSEQUENT____ANTECEDENT__ANTECEDENT[carrier1,box3,depot,robot1]
+M_deliver_supply_with_already_carrier_M_deliver_supply_with_already_carrier_3[?r=robot1,?l1=depot,?l2=location2] @ T_move_robot_M_deliver_supply_with_already_carrier_3[robot1]
+M_move_robot_with_carrier[?l2=location2,?r=robot1,?l1=depot,?c=carrier1] @ T_move_robot[robot1,depot,location2]
+move_robot_with_carrier[robot1,carrier1,depot,location2]
+M_deliver_supply_with_already_carrier_M_deliver_supply_with_already_carrier_4[?r=robot1,?b=box3] @ T_unload_box_from_carrier_M_deliver_supply_with_already_carrier_4[robot1]
+M_unload_box_from_carrier[?r=robot1,?l=location2,?b=box3,?c=carrier1] @ T_unload_box_from_carrier[robot1,box3]
+M-unload_box_from_carrier__ANTECEDENT[?r=robot1,?c=carrier1,?l=location2,?b=box3] @ unload_box_from_carrier[carrier1,box3,location2,robot1]
+M-unload_box_from_carrier__ANTECEDENT__CONSEQUENT__[?r=robot1,?c=carrier1,?l=location2,?b=box3] @ unload_box_from_carrier__ANTECEDENT[carrier1,box3,location2,robot1]
+M-unload_box_from_carrier__ANTECEDENT__CONSEQUENT____ANTECEDENT[?r=robot1,?c=carrier1,?l=location2,?b=box3] @ unload_box_from_carrier__ANTECEDENT__CONSEQUENT__[carrier1,box3,location2,robot1]
+M-unload_box_from_carrier__ANTECEDENT__CONSEQUENT____ANTECEDENT__ANTECEDENT[?r=robot1,?c=carrier1,?l=location2,?b=box3] @ unload_box_from_carrier__ANTECEDENT__CONSEQUENT____ANTECEDENT[carrier1,box3,location2,robot1]
+unload_box_from_carrier__ANTECEDENT__CONSEQUENT____ANTECEDENT__ANTECEDENT[carrier1,box3,location2,robot1]
+M_deliver[?l=location2,?s=food1,?b=box3,?p=per2,?r=robot1] @ T_deliver[per2,food1]
+deliver[robot1,location2,per2,food1,box3]
+M_deliver_supply_by_loading_supply_from_depot[?l1=location1,?b=box4,?c=carrier1,?p=per3,?l2=depot,?s=food2,?r=robot1] @ T_deliver_supply[per3,food2]
+M_return_to_depot_M_return_to_depot_2[?r=robot1,?b=box3] @ T_load_box_on_carrier_M_return_to_depot_2[robot1]
+M_load_box_on_carrier[?l=location2,?b=box3,?c=carrier1,?r=robot1] @ T_load_box_on_carrier[robot1,box3]
+M-load_box_on_carrier__DISJUNCT-1[?r=robot1,?c=carrier1,?l=location2,?b=box3] @ load_box_on_carrier[carrier1,box3,location2,robot1]
+M-load_box_on_carrier__DISJUNCT-1__ANTECEDENT[?r=robot1,?c=carrier1,?l=location2,?b=box3] @ load_box_on_carrier__DISJUNCT-1[carrier1,box3,location2,robot1]
+M-load_box_on_carrier__DISJUNCT-1__ANTECEDENT__CONSEQUENT__[?r=robot1,?c=carrier1,?l=location2,?b=box3] @ load_box_on_carrier__DISJUNCT-1__ANTECEDENT[carrier1,box3,location2,robot1]
+M-load_box_on_carrier__DISJUNCT-1__ANTECEDENT__CONSEQUENT____ANTECEDENT[?r=robot1,?c=carrier1,?l=location2,?b=box3] @ load_box_on_carrier__DISJUNCT-1__ANTECEDENT__CONSEQUENT__[carrier1,box3,location2,robot1]
+M-load_box_on_carrier__DISJUNCT-1__ANTECEDENT__CONSEQUENT____ANTECEDENT__ANTECEDENT[?r=robot1,?c=carrier1,?l=location2,?b=box3] @ load_box_on_carrier__DISJUNCT-1__ANTECEDENT__CONSEQUENT____ANTECEDENT[carrier1,box3,location2,robot1]
+load_box_on_carrier__DISJUNCT-1__ANTECEDENT__CONSEQUENT____ANTECEDENT__ANTECEDENT[carrier1,box3,location2,robot1]
+M_return_to_depot_M_return_to_depot_3[?r=robot1,?l2=depot,?l1=location2] @ T_move_robot_M_return_to_depot_3[robot1]
+M_move_robot_with_carrier[?l2=depot,?r=robot1,?l1=location2,?c=carrier1] @ T_move_robot[robot1,location2,depot]
+move_robot_with_carrier[robot1,carrier1,location2,depot]
+M_deliver_supply_with_already_carrier[?p=per3,?r=robot1,?s=food2,?c=carrier1] @ T_deliver_supply[per3,food2]
+M_prepare_box[?c=carrier1,?l=location1,?s=food2,?r=robot1,?b=box4] @ T_prepare_box[robot1,food2]
+fill_box[robot1,depot,box4,food2]
+M_load_box_on_carrier[?l=depot,?b=box4,?c=carrier1,?r=robot1] @ T_load_box_on_carrier[robot1,box4]
+M-load_box_on_carrier__DISJUNCT-2[?r=robot1,?c=carrier1,?l=depot,?b=box4] @ load_box_on_carrier[carrier1,box4,depot,robot1]
+M-load_box_on_carrier__DISJUNCT-2__ANTECEDENT[?r=robot1,?c=carrier1,?l=depot,?b=box4] @ load_box_on_carrier__DISJUNCT-2[carrier1,box4,depot,robot1]
+M-load_box_on_carrier__DISJUNCT-2__ANTECEDENT__ANTECEDENT[?r=robot1,?c=carrier1,?l=depot,?b=box4] @ load_box_on_carrier__DISJUNCT-2__ANTECEDENT[carrier1,box4,depot,robot1]
+M-load_box_on_carrier__DISJUNCT-2__ANTECEDENT__ANTECEDENT__CONSEQUENT__[?r=robot1,?c=carrier1,?l=depot,?b=box4] @ load_box_on_carrier__DISJUNCT-2__ANTECEDENT__ANTECEDENT[carrier1,box4,depot,robot1]
+M-load_box_on_carrier__DISJUNCT-2__ANTECEDENT__ANTECEDENT__CONSEQUENT____ANTECEDENT[?r=robot1,?c=carrier1,?l=depot,?b=box4] @ load_box_on_carrier__DISJUNCT-2__ANTECEDENT__ANTECEDENT__CONSEQUENT__[carrier1,box4,depot,robot1]
+load_box_on_carrier__DISJUNCT-2__ANTECEDENT__ANTECEDENT__CONSEQUENT____ANTECEDENT[carrier1,box4,depot,robot1]
+M_deliver_supply_with_already_carrier_M_deliver_supply_with_already_carrier_3[?r=robot1,?l1=depot,?l2=location3] @ T_move_robot_M_deliver_supply_with_already_carrier_3[robot1]
+M_move_robot_with_carrier[?l2=location3,?r=robot1,?l1=depot,?c=carrier1] @ T_move_robot[robot1,depot,location3]
+move_robot_with_carrier[robot1,carrier1,depot,location3]
+M_deliver_supply_with_already_carrier_M_deliver_supply_with_already_carrier_4[?r=robot1,?b=box4] @ T_unload_box_from_carrier_M_deliver_supply_with_already_carrier_4[robot1]
+M_unload_box_from_carrier[?r=robot1,?l=location3,?b=box4,?c=carrier1] @ T_unload_box_from_carrier[robot1,box4]
+M-unload_box_from_carrier__ANTECEDENT[?r=robot1,?c=carrier1,?l=location3,?b=box4] @ unload_box_from_carrier[carrier1,box4,location3,robot1]
+M-unload_box_from_carrier__ANTECEDENT__ANTECEDENT[?r=robot1,?c=carrier1,?l=location3,?b=box4] @ unload_box_from_carrier__ANTECEDENT[carrier1,box4,location3,robot1]
+M-unload_box_from_carrier__ANTECEDENT__ANTECEDENT__CONSEQUENT__[?r=robot1,?c=carrier1,?l=location3,?b=box4] @ unload_box_from_carrier__ANTECEDENT__ANTECEDENT[carrier1,box4,location3,robot1]
+M-unload_box_from_carrier__ANTECEDENT__ANTECEDENT__CONSEQUENT____ANTECEDENT[?r=robot1,?c=carrier1,?l=location3,?b=box4] @ unload_box_from_carrier__ANTECEDENT__ANTECEDENT__CONSEQUENT__[carrier1,box4,location3,robot1]
+unload_box_from_carrier__ANTECEDENT__ANTECEDENT__CONSEQUENT____ANTECEDENT[carrier1,box4,location3,robot1]
+M_deliver[?l=location3,?s=food2,?b=box4,?p=per3,?r=robot1] @ T_deliver[per3,food2]
+deliver[robot1,location3,per3,food2,box4]
+M_deliver_supply_by_loading_supply_from_depot[?l1=location3,?b=box2,?c=carrier1,?p=per1,?l2=depot,?s=tools1,?r=robot1] @ T_deliver_supply[per1,tools1]
+M_return_to_depot_M_return_to_depot_2[?r=robot1,?b=box4] @ T_load_box_on_carrier_M_return_to_depot_2[robot1]
+M_load_box_on_carrier[?l=location3,?b=box4,?c=carrier1,?r=robot1] @ T_load_box_on_carrier[robot1,box4]
+M-load_box_on_carrier__DISJUNCT-2[?r=robot1,?c=carrier1,?l=location3,?b=box4] @ load_box_on_carrier[carrier1,box4,location3,robot1]
+M-load_box_on_carrier__DISJUNCT-2__ANTECEDENT[?r=robot1,?c=carrier1,?l=location3,?b=box4] @ load_box_on_carrier__DISJUNCT-2[carrier1,box4,location3,robot1]
+M-load_box_on_carrier__DISJUNCT-2__ANTECEDENT__ANTECEDENT[?r=robot1,?c=carrier1,?l=location3,?b=box4] @ load_box_on_carrier__DISJUNCT-2__ANTECEDENT[carrier1,box4,location3,robot1]
+M-load_box_on_carrier__DISJUNCT-2__ANTECEDENT__ANTECEDENT__CONSEQUENT__[?r=robot1,?c=carrier1,?l=location3,?b=box4] @ load_box_on_carrier__DISJUNCT-2__ANTECEDENT__ANTECEDENT[carrier1,box4,location3,robot1]
+M-load_box_on_carrier__DISJUNCT-2__ANTECEDENT__ANTECEDENT__CONSEQUENT____ANTECEDENT[?r=robot1,?c=carrier1,?l=location3,?b=box4] @ load_box_on_carrier__DISJUNCT-2__ANTECEDENT__ANTECEDENT__CONSEQUENT__[carrier1,box4,location3,robot1]
+load_box_on_carrier__DISJUNCT-2__ANTECEDENT__ANTECEDENT__CONSEQUENT____ANTECEDENT[carrier1,box4,location3,robot1]
+M_return_to_depot_M_return_to_depot_3[?r=robot1,?l2=depot,?l1=location3] @ T_move_robot_M_return_to_depot_3[robot1]
+M_move_robot_with_carrier[?l2=depot,?r=robot1,?l1=location3,?c=carrier1] @ T_move_robot[robot1,location3,depot]
+move_robot_with_carrier[robot1,carrier1,location3,depot]
+M_deliver_supply_with_already_carrier[?p=per1,?r=robot1,?s=tools1,?c=carrier1] @ T_deliver_supply[per1,tools1]
+M_prepare_box[?c=carrier1,?l=depot,?s=tools1,?r=robot1,?b=box1] @ T_prepare_box[robot1,tools1]
+fill_box[robot1,depot,box1,tools1]
+M_load_box_on_carrier[?l=depot,?b=box1,?c=carrier1,?r=robot1] @ T_load_box_on_carrier[robot1,box1]
+M-load_box_on_carrier__DISJUNCT-3[?r=robot1,?c=carrier1,?l=depot,?b=box1] @ load_box_on_carrier[carrier1,box1,depot,robot1]
+M-load_box_on_carrier__DISJUNCT-3__ANTECEDENT[?r=robot1,?c=carrier1,?l=depot,?b=box1] @ load_box_on_carrier__DISJUNCT-3[carrier1,box1,depot,robot1]
+M-load_box_on_carrier__DISJUNCT-3__ANTECEDENT__ANTECEDENT[?r=robot1,?c=carrier1,?l=depot,?b=box1] @ load_box_on_carrier__DISJUNCT-3__ANTECEDENT[carrier1,box1,depot,robot1]
+M-load_box_on_carrier__DISJUNCT-3__ANTECEDENT__ANTECEDENT__ANTECEDENT[?r=robot1,?c=carrier1,?l=depot,?b=box1] @ load_box_on_carrier__DISJUNCT-3__ANTECEDENT__ANTECEDENT[carrier1,box1,depot,robot1]
+M-load_box_on_carrier__DISJUNCT-3__ANTECEDENT__ANTECEDENT__ANTECEDENT__CONSEQUENT__[?r=robot1,?c=carrier1,?l=depot,?b=box1] @ load_box_on_carrier__DISJUNCT-3__ANTECEDENT__ANTECEDENT__ANTECEDENT[carrier1,box1,depot,robot1]
+load_box_on_carrier__DISJUNCT-3__ANTECEDENT__ANTECEDENT__ANTECEDENT__CONSEQUENT__[carrier1,box1,depot,robot1]
+M_deliver_supply_with_already_carrier_M_deliver_supply_with_already_carrier_3[?r=robot1,?l1=depot,?l2=location1] @ T_move_robot_M_deliver_supply_with_already_carrier_3[robot1]
+M_move_robot_with_carrier[?l2=location1,?r=robot1,?l1=depot,?c=carrier1] @ T_move_robot[robot1,depot,location1]
+move_robot_with_carrier[robot1,carrier1,depot,location1]
+M_deliver_supply_with_already_carrier_M_deliver_supply_with_already_carrier_4[?r=robot1,?b=box1] @ T_unload_box_from_carrier_M_deliver_supply_with_already_carrier_4[robot1]
+M_unload_box_from_carrier[?r=robot1,?l=location1,?b=box1,?c=carrier1] @ T_unload_box_from_carrier[robot1,box1]
+M-unload_box_from_carrier__ANTECEDENT[?r=robot1,?c=carrier1,?l=location1,?b=box1] @ unload_box_from_carrier[carrier1,box1,location1,robot1]
+M-unload_box_from_carrier__ANTECEDENT__ANTECEDENT[?r=robot1,?c=carrier1,?l=location1,?b=box1] @ unload_box_from_carrier__ANTECEDENT[carrier1,box1,location1,robot1]
+M-unload_box_from_carrier__ANTECEDENT__ANTECEDENT__ANTECEDENT[?r=robot1,?c=carrier1,?l=location1,?b=box1] @ unload_box_from_carrier__ANTECEDENT__ANTECEDENT[carrier1,box1,location1,robot1]
+M-unload_box_from_carrier__ANTECEDENT__ANTECEDENT__ANTECEDENT__CONSEQUENT__[?r=robot1,?c=carrier1,?l=location1,?b=box1] @ unload_box_from_carrier__ANTECEDENT__ANTECEDENT__ANTECEDENT[carrier1,box1,location1,robot1]
+unload_box_from_carrier__ANTECEDENT__ANTECEDENT__ANTECEDENT__CONSEQUENT__[carrier1,box1,location1,robot1]
+M_deliver[?l=location1,?s=tools1,?b=box1,?p=per1,?r=robot1] @ T_deliver[per1,tools1]
+deliver[robot1,location1,per1,tools1,box1]
+```
+
+# Problem 4
+
+### Machine setup:
+
+1. Planner: tfd
+  
+  - Command line ``tfd domain.pddl problem.pddl``
+  - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
+2. Planner: OPTIC
+  
+  - Command line: ``optic domain.pddl problem.pddl``
+  - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
+  - Move to _no_negative_preconditions_ folder to use it
+  
+  > OPTIC does not support :negative-preconditions
+  
+
+## Results :memo:
+
+### Solution found
+
+#### lama
+
+> Plan length: 26 steps.
+
+> Sub-optimal solution because, if we apply the condition to not load a box that has been already used for delivery, the final plan is 25 steps long. But using the latter case broke the extra problem because we do not give the possibility to reuse the boxes.
+
+```bash
+- 0.00100000: (attach_carrier_to_robot robot1 depot carrier1) [2.00000000]
+- 2.01100000: (fill_box robot1 depot box4 med1) [4.00000000]
+- 6.02100000: (load_box_on_carrier carrier1 box4 depot robot1) [3.00000000]
+- 9.03100000: (move_robot_with_carrier robot1 carrier1 depot location1) [7.00000000]
+- 16.04100000: (unload_box_from_carrier carrier1 box4 location1 robot1) [3.00000000]
+- 19.05100000: (deliver robot1 location1 per1 med1 box4) [3.00000000]
+- 22.06100000: (load_box_on_carrier carrier1 box4 location1 robot1) [3.00000000]
+- 25.07100000: (move_robot_with_carrier robot1 carrier1 location1 depot) [7.00000000]
+- 32.08100000: (fill_box robot1 depot box3 tools1) [4.00000000]
+- 36.09100000: (load_box_on_carrier carrier1 box3 depot robot1) [3.00000000]
+- 39.10100000: (move_robot_with_carrier robot1 carrier1 depot location1) [7.00000000]
+- 46.11100000: (unload_box_from_carrier carrier1 box3 location1 robot1) [3.00000000]
+- 49.12100000: (deliver robot1 location1 per1 tools1 box3) [3.00000000]
+- 52.13100000: (move_robot_with_carrier robot1 carrier1 location1 depot) [7.00000000]
+- 59.14100000: (fill_box robot1 depot box2 food1) [4.00000000]
+- 59.15100000: (fill_box robot1 depot box1 food2) [4.00000000]
+- 63.16100000: (load_box_on_carrier carrier1 box1 depot robot1) [3.00000000]
+- 63.17100000: (load_box_on_carrier carrier1 box2 depot robot1) [3.00000000]
+- 66.18100000: (move_robot_with_carrier robot1 carrier1 depot location2) [7.00000000]
+- 73.19100000: (unload_box_from_carrier carrier1 box1 location2 robot1) [3.00000000]
+- 76.20100000: (move_robot_with_carrier robot1 carrier1 location2 location3) [7.00000000]
+- 83.21100000: (unload_box_from_carrier carrier1 box2 location3 robot1) [3.00000000]
+- 86.22100000: (deliver robot1 location3 per3 food1 box2) [3.00000000]
+- 89.23100000: (move_robot_with_carrier robot1 carrier1 location3 location2) [7.00000000]
+- 96.24100000: (deliver robot1 location2 per2 food2 box1) [3.00000000]
+- 99.25100000: (delivery_or_refactored_possible_action2 per2 per3 food1 food2) [0.10000000]
+```
+
+#### extra with 3 boxes using tfd planner
+
+> Plan length: 27 steps.
+
+```bash
+- 0.00100000: (attach_carrier_to_robot robot1 depot carrier1) [2.00000000]
+- 2.01100000: (fill_box robot1 depot box2 food1) [4.00000000]
+- 6.02100000: (load_box_on_carrier carrier1 box2 depot robot1) [3.00000000]
+- 9.03100000: (move_robot_with_carrier robot1 carrier1 depot location2) [7.00000000]
+- 16.04100000: (unload_box_from_carrier carrier1 box2 location2 robot1) [3.00000000]
+- 19.05100000: (deliver robot1 location2 per2 food1 box2) [3.00000000]
+- 22.06100000: (load_box_on_carrier carrier1 box2 location2 robot1) [3.00000000]
+- 25.07100000: (move_robot_with_carrier robot1 carrier1 location2 depot) [7.00000000]
+- 32.08100000: (unload_box_from_carrier carrier1 box2 depot robot1) [3.00000000]
+- 35.09100000: (fill_box robot1 depot box2 food2) [4.00000000]
+- 39.10100000: (load_box_on_carrier carrier1 box2 depot robot1) [3.00000000]
+- 42.11100000: (move_robot_with_carrier robot1 carrier1 depot location3) [7.00000000]
+- 49.12100000: (unload_box_from_carrier carrier1 box2 location3 robot1) [3.00000000]
+- 52.13100000: (deliver robot1 location3 per3 food2 box2) [3.00000000]
+- 55.14100000: (load_box_on_carrier carrier1 box2 location3 robot1) [3.00000000]
+- 58.15100000: (move_robot_with_carrier robot1 carrier1 location3 depot) [7.00000000]
+- 65.16100000: (fill_box robot1 depot box3 med1) [4.00000000]
+- 69.17100000: (load_box_on_carrier carrier1 box3 depot robot1) [3.00000000]
+- 72.18100000: (move_robot_with_carrier robot1 carrier1 depot location1) [7.00000000]
+- 79.19100000: (unload_box_from_carrier carrier1 box3 location1 robot1) [3.00000000]
+- 82.20100000: (deliver robot1 location1 per1 med1 box3) [3.00000000]
+- 85.21100000: (move_robot_with_carrier robot1 carrier1 location1 depot) [7.00000000]
+- 92.22100000: (fill_box robot1 depot box1 tools1) [4.00000000]
+- 96.23100000: (load_box_on_carrier carrier1 box1 depot robot1) [3.00000000]
+- 99.24100000: (move_robot_with_carrier robot1 carrier1 depot location1) [7.00000000]
+- 106.25100000: (unload_box_from_carrier carrier1 box1 location1 robot1) [3.00000000]
+- 109.26100000: (deliver robot1 location1 per1 tools1 box1) [3.00000000]
+```
+
+#### without negative preconditions
+
+> Plan length: 27 steps.
+
+```bash
+- 0.000: (attach_carrier_to_robot robot1 depot carrier1)  [2.000]
+- 2.001: (fill_box robot1 depot box1 food2 carrier1)  [4.000]
+- 6.002: (load_box_on_carrier carrier1 box1 depot robot1)  [3.000]
+- 9.002: (move_robot_with_carrier robot1 carrier1 depot location3)  [7.000]
+- 16.002: (unload_box_from_carrier carrier1 box1 location3 robot1)  [3.000]
+- 16.002: (deliver robot1 location3 per3 food2 box1)  [3.000]
+- 19.002: (move_robot_with_carrier robot1 carrier1 location3 depot)  [7.000]
+- 26.002: (fill_box robot1 depot box2 food1 carrier1)  [4.000]
+- 30.002: (load_box_on_carrier carrier1 box2 depot robot1)  [3.000]
+- 33.002: (move_robot_with_carrier robot1 carrier1 depot location2)  [7.000]
+- 40.002: (unload_box_from_carrier carrier1 box2 location2 robot1)  [3.000]
+- 40.002: (deliver robot1 location2 per2 food1 box2)  [3.000]
+- 43.002: (move_robot_with_carrier robot1 carrier1 location2 depot)  [7.000]
+- 50.002: (fill_box robot1 depot box3 tools1 carrier1)  [4.000]
+- 50.002: (fill_box robot1 depot box4 med1 carrier1)  [4.000]
+- 54.002: (load_box_on_carrier carrier1 box4 depot robot1)  [3.000]
+- 54.003: (load_box_on_carrier carrier1 box3 depot robot1)  [3.000]
+- 57.003: (move_robot_with_carrier robot1 carrier1 depot location1)  [7.000]
+- 64.003: (unload_box_from_carrier carrier1 box4 location1 robot1)  [3.000]
+- 64.004: (unload_box_from_carrier carrier1 box3 location1 robot1)  [3.000]
+- 64.004: (deliver robot1 location1 per1 med1 box4)  [3.000]
+- 64.004: (deliver robot1 location1 per1 tools1 box3)  [3.000]
+- 66.904: (delivery_or_refactored_possible_action1 per2 per3 food1 food2)  [0.100]
+```
+
+# Problem 5
+
+### Machine setup:
+
+_Please, refer to [setup](../setup.md) instructions._
+
+## Results :memo:
+
+### Solution found
+
+#### POPF planner output
+
+> Plan length: 25 steps.
+
+```bash
+- 0:      (attach_carrier_to_robot robot1 depot carrier1) [2]
+- 2.001:  (fill_box robot1 depot box1 food1 carrier1)     [4]
+- 6.002:  (load_box_on_carrier carrier1 box1 depot robot1)        [3]
+- 9.002:  (move_robot_with_carrier robot1 carrier1 depot location3)       [7]
+- 16.002: (unload_box_from_carrier carrier1 box1 location3 robot1)        [3]
+- 16.002: (deliver robot1 location3 per3 food1 box1)      [3]
+- 19.002: (move_robot_with_carrier robot1 carrier1 location3 depot)       [7]
+- 26.002: (fill_box robot1 depot box2 food2 carrier1)     [4]
+- 30.002: (load_box_on_carrier carrier1 box2 depot robot1)        [3]
+- 33.002: (move_robot_with_carrier robot1 carrier1 depot location2)       [7]
+- 40.002: (unload_box_from_carrier carrier1 box2 location2 robot1)        [3]
+- 40.002: (deliver robot1 location2 per2 food2 box2)      [3]
+- 43.002: (move_robot_with_carrier robot1 carrier1 location2 depot)       [7]
+- 43.003: (delivery_or_refactored_possible_action2 per2 per3 food1 food2) [0.1]
+- 50.002: (fill_box robot1 depot box3 med1 carrier1)      [4]
+- 54.002: (load_box_on_carrier carrier1 box3 depot robot1)        [3]
+- 57.002: (move_robot_with_carrier robot1 carrier1 depot location1)       [7]
+- 64.002: (unload_box_from_carrier carrier1 box3 location1 robot1)        [3]
+- 64.002: (deliver robot1 location1 per1 med1 box3)       [3]
+- 67.002: (move_robot_with_carrier robot1 carrier1 location1 depot)       [7]
+- 74.002: (fill_box robot1 depot box4 tools1 carrier1)    [4]
+- 78.002: (load_box_on_carrier carrier1 box4 depot robot1)        [3]
+- 81.002: (move_robot_with_carrier robot1 carrier1 depot location1)       [7]
+- 88.002: (unload_box_from_carrier carrier1 box4 location1 robot1)        [3]
+- 88.002: (deliver robot1 location1 per1 tools1 box4)     [3]
+```
+
+#### PlanSys execution
+
+```bash
+- Attaching carrier to robot ... [100%]  
+- Filling box ... [100%]  
+- Loading box ... [100%]  
+- Moving robot with carrier ... [100%]  
+- Unloading box ... [100%]  
+- Delivering to person ... [100%]  
+- Moving robot with carrier ... [100%]  
+- Filling box ... [100%]  
+- Loading box ... [100%]  
+- Moving robot with carrier ... [100%]  
+- Unloading box ... [100%]  
+- Delivering to person ... [100%]  
+- Delivering supply ... [100%]  
+- Moving robot with carrier ... [100%]  
+- Filling box ... [100%]  
+- Loading box ... [100%]  
+- Moving robot with carrier ... [100%]  
+- Unloading box ... [100%]  
+- Delivering to person ... [100%]  
+- Moving robot with carrier ... [100%]  
+- Filling box ... [100%]  
+- Loading box ... [100%]  
+- Moving robot with carrier ... [100%]  
+- Unloading box ... [100%]  
+- Delivering to person ... [100%] 
 ```
