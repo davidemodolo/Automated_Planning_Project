@@ -1,7 +1,9 @@
-# <p align="center">Automated Planning: Theory and Practice - project</p>
-## <p align="center"> by <a href="https://github.com/davidemodolo/">Davide Modolo</a> & <a href="https://github.com/laitifranz">Francesco Laiti</a> </p>
-### <p align="center">Academic Year 2022-2023, University of Trento</p>
-
+# <p align="center"> Automated Planning: Theory and Practice - project </p>
+<p align="center">
+  by <a href="https://github.com/davidemodolo/">Davide Modolo</a> & <a href="https://github.com/laitifranz">Francesco Laiti</a>
+  <br>
+  Academic Year 2022-2023, University of Trento
+</p>
 <p align="center">
   <img src="https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54" alt="Python" height="25px">
   <img src="https://raw.githubusercontent.com/davidemodolo/PDDL_SVG_Icons/c978884225eca6e5e887515b6db818f94ac3cd0a/pddl.svg" alt="PDDL" height="25px">
