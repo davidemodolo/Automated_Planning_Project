@@ -1,8 +1,3 @@
-; NOTE IMPORTANTI
-; da numeric-fluents a fluents
-; equality non accettato dal planner, rimossi
-; non acetta negative-prenconditions, fixato
-
 (define (domain domain5)
     (:requirements :strips :typing :adl :fluents :durative-actions)
     (:types

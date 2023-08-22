@@ -1,3 +1,4 @@
+#setup bash
 source /opt/ros/humble/setup.bash
 
 # compile the repository
