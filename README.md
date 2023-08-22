@@ -1,6 +1,6 @@
-<p align="center" style="font-size: 30px; font-weight: bold;">Automated Planning: Theory and Practice - project</p>
-<p align="center" style="font-size: 22px;"> by <a href="https://github.com/davidemodolo/">Davide Modolo</a> & <a href="https://github.com/laitifranz">Francesco Laiti</a> </p>
-<p align="center" style="font-size: 15px;">Academic Year 2022-2023, University of Trento</p>
+# <p align="center">Automated Planning: Theory and Practice - project</p>
+## <p align="center"> by <a href="https://github.com/davidemodolo/">Davide Modolo</a> & <a href="https://github.com/laitifranz">Francesco Laiti</a> </p>
+### <p align="center">Academic Year 2022-2023, University of Trento</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54" alt="Python" height="25px">
@@ -14,7 +14,7 @@
 <div align="center">
     <a href=#overview-bookmark>Overview</a>
     •
-    <a href=#directory-contents-tree>Directory contents</a>
+    <a href=#directory-contents-evergreen_tree>Directory contents</a>
     •
     <a href=#installation-and-run-hammer>Installation & Run</a>
     •
@@ -69,7 +69,7 @@ To summarize:
 Some assumptions has been made, please refer to the assignment and our report. The full assignment is available [here](assignment.pdf).
 
 
-# Directory contents :tree:
+# Directory contents :evergreen_tree:
 
 This repository has been structured to accomplish the contents requested for the delivery:
 - PDDL/HDDL files, organized in folders and parsable correctly by at least one planner;
