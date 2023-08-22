@@ -4,7 +4,7 @@
 - HTN Planner: PANDA
     - Available at:
         - [Resource](https://www.uni-ulm.de/fileadmin/website_uni_ulm/iui.inst.090/panda/PANDA.jar) from the official website;
-        - [PANDA.jar](problem3/PANDA.jar) file inside this folder.
+        - [PANDA.jar](PANDA.jar) file inside this folder.
 - Command line ``java -jar PANDA.jar -parser hddl domain.hddl problem.hddl``
 - Run on Docker image ``docker pull openjdk:8u342-jre`` 
     >(why version 8? the authors recommend version 8 to build the planner. Reference https://github.com/galvusdamor/panda3core)
