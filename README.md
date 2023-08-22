@@ -1,8 +1,27 @@
-**REPOSITORY FOR _AUTOMATED PLANNING: THEORY AND PRACTICE_ PROJECT**
+<p align="center" style="font-size: 30px; font-weight: bold;">Automated Planning: Theory and Practice - project</p>
+<p align="center" style="font-size: 22px;"> by <a href="https://github.com/davidemodolo/">Davide Modolo</a> & <a href="https://github.com/laitifranz">Francesco Laiti</a> </p>
+<p align="center" style="font-size: 15px;">Academic Year 2022-2023, University of Trento</p>
 
-by [Davide Modolo](https://github.com/davidemodolo/) & [Francesco Laiti](https://github.com/laitifranz)
+<p align="center">
+  <img src="https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54" alt="Python" height="25px">
+  <img src="https://raw.githubusercontent.com/davidemodolo/PDDL_SVG_Icons/c978884225eca6e5e887515b6db818f94ac3cd0a/pddl.svg" alt="PDDL" height="25px">
+  <img src="https://raw.githubusercontent.com/davidemodolo/PDDL_SVG_Icons/c978884225eca6e5e887515b6db818f94ac3cd0a/hddl.svg" alt="HDDL" height="25px">
+  <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white" alt="docker" height="25px"/> </a> 
+</p>
 
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![PDDL](https://raw.githubusercontent.com/davidemodolo/PDDL_SVG_Icons/c978884225eca6e5e887515b6db818f94ac3cd0a/pddl.svg) ![HDDL](https://raw.githubusercontent.com/davidemodolo/PDDL_SVG_Icons/c978884225eca6e5e887515b6db818f94ac3cd0a/hddl.svg)
+---
+
+<div align="center">
+    <a href=#overview-bookmark>Overview</a>
+    •
+    <a href=#directory-contents-tree>Directory contents</a>
+    •
+    <a href=#installation-and-run-hammer>Installation & Run</a>
+    •
+    <a href=#results-memo>Results</a>
+</div>
+<br>
+
 # TODO
 - [x] Sistemare i files python nelle rispettive cartelle
 - [x] Creare il readme di questa repo
@@ -12,25 +31,54 @@ by [Davide Modolo](https://github.com/davidemodolo/) & [Francesco Laiti](https:/
 - [ ] Finire il readme
 - [ ] Aggiornare tree
 
-# PDDL/HDDL for Emergency Services Logistics Problems
+# Overview :bookmark:
+## PDDL/HDDL for Emergency Services Logistics Problems
 
 The goal of this project was to solve five different scenarios involving injured/needy people and delivery robots using PDDL/HDDL planners.
 
-The first problem is solved using two planners, the second problem has two different variations (with and without `:numeric-fluents`), the third and the fourth are solved using PANDA and the fifth using PlanSys2.
-
-The second scenario is built on the first, the third and the fourth are built on the second and the fifth is built on the fourth.
-
-## Task
-
-The main goals of this assignment are to model planning problems using PDDL/HDDL and use state-of-the-art planners like planutils, fast downward, or optic to solve them.
-
 The scenario considered is inspired by an emergency services logistics problem. The objective is to use robotic agents to deliver boxes containing emergency supplies to injured individuals who are located in fixed positions.
 
-We used `planner.domains` API, `planutils` docker image, `PANDA` and `PlanSys2` to compute the plans.
+The assignment is structured in 5 sub-problems, the second build on the first, both the third and the fourth build on the second, the fifth builds on the fourth.
 
-## Directory content
+To summarize:
+- Problem 1
+  - Objective: Develop a structure using PDDL.
+  - Focus: A robot delivers essential items to the injured.
+  - Tools: Planutils.
 
-Created with `tree /F` command
+- Problem 2
+  - Objective: Builds on top of Problem 1 with some extesions for efficient transport.
+  - Tools: Planutils.
+  - Versions: 2 (with and without `:numeric-fluents`)
+
+- Problem 3
+  - Objective: Address Problem 2 with hierarchical task networks (HTN)
+  - Details: Introduces tasks and methods.
+  - Tool: PANDA planner.
+
+- Problem 4
+  - Objective: Builds on top of Problem 2, integrating durative actions.
+  - Details: Assigns durations and time constraints to actions. Goal is to minimize time.
+  - Tools: Planutils.
+  - Versions: 2 (with and without `:negative-preconditions`)
+
+- Problem 5
+  - Objective: Implementing Problem 4 within PlanSys using fake actions.
+  - Tools: ROS2 & PlanSys2.
+
+Some assumptions has been made, please refer to the assignment and our report. The full assignment is available [here](assignment.pdf).
+
+
+# Directory contents :tree:
+
+This repository has been structured to accomplish the contents requested for the delivery:
+- PDDL/HDDL files, organized in folders and parsable correctly by at least one planner;
+- Folder [plansys_problem5](problem5/plansys_problem5) contains all the code to execute the PlanSys2 problem;
+- PDF report;
+
+Others files has been added for completeness.
+
+Below we report the full structure of this repo. Created with `tree /F` command
 
 ```bash
 │   .gitignore
@@ -117,9 +165,10 @@ Created with `tree /F` command
             prob2_domain.png
             prob2_problem.png
 ```
-
-# Problem 1
-
+# Installation and Run :hammer:
+In every problem folder we provide a markdown with the same information collected here.
+>Remember to navigate to the correct folder in order to run the correct domain, problem or config file!
+## Problem 1
 ### Machine setup:
 
 1. Planner: LAMA
@@ -129,7 +178,73 @@ Created with `tree /F` command
   - Command line: ``python runnerSolverAPI.py``
   - Python is required
 
-## Results :memo:
+## Problem 2
+### Machine setup:
+
+1. Planner: LAMA
+  - Command line ``lama domain.pddl problem.pddl``
+  - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
+2. Planner: online solver
+  - Command line: ``python runnerSolverAPI.py``
+  - Python is required. To run it move to _numeric_fluents_ folder
+
+## Problem 3
+### Machine setup:
+
+- HTN Planner: PANDA
+  
+  - Available at:
+    - [Resource](https://www.uni-ulm.de/fileadmin/website_uni_ulm/iui.inst.090/panda/PANDA.jar) from the official website;
+    - [PANDA.jar](PANDA.jar) file inside this folder.
+- Command line ``java -jar PANDA.jar -parser hddl domain.hddl problem.hddl``
+  
+- Run on Docker image ``docker pull openjdk:8u342-jre``
+  
+  > (why version 8? the authors recommend version 8 to build the planner. Reference https://github.com/galvusdamor/panda3core)
+
+## Problem 4
+### Machine setup:
+
+1. Planner: tfd
+  
+  - Command line ``tfd domain.pddl problem.pddl``
+  - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
+2. Planner: OPTIC
+  
+  - Command line: ``optic domain.pddl problem.pddl``
+  - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
+  - Move to _no_negative_preconditions_ folder to use it
+  
+  > OPTIC does not support :negative-preconditions
+
+## Problem 5
+### How to build and run the Docker image
+
+1. Navigate to this folder with the terminal
+2. Run ``docker build --rm  --tag ros-humble . --file Dockerfile``
+3. Run ``docker run -it --name ros ros-humble bash``
+
+### How to run PlanSys2
+Two terminals of the same Docker container are needed.
+
+> The steps provided are an adapted version of the ones provided by the official page https://plansys2.github.io/tutorials/docs/simple_example.html
+
+#### Terminal 1
+1. Go to folder problem5 ``cd problem5``
+2. Compile and launch the repo by running ``bash launch_terminal1.sh``
+3. Wait until the terminal stops to print verbose
+
+#### Terminal 2 
+1. Go to folder problem5 ``cd problem5``
+2. Launch PlanSys2 terminal ``bash launch_terminal2.sh``. If you see a server error, please type ``quit`` and repeat this step
+3. When ROS started, run the command ``source /root/plansys2_problem5/launch/problem 1`` to add the problem - you may need to adjust the path and here you can change the problem... and don't forget the 1 at the end!
+4. Now you can inspect the goal, predicates, types... use ``help``to see the available commands
+5. Creates plan and shows it ``get plan`` to retrieve a valid plan to be executed. The default planner is POPF
+6. Creates plan and runs ``run`` to launch the plan! :rocket:
+
+# Results :memo:
+In the [screenshots](screenshots) folder we provide the image version of the results reported in this section.
+## Problem 1
 
 Both planners returned the same plan.
 
@@ -187,18 +302,7 @@ Both planners returned the same plan.
 19. (deliver robot1 location3 person2 tools1 box2)
 ```
 
-# Problem 2
-
-### Machine setup:
-
-1. Planner: LAMA
-  - Command line ``lama domain.pddl problem.pddl``
-  - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
-2. Planner: online solver
-  - Command line: ``python runnerSolverAPI.py``
-  - Python is required. To run it move to _numeric_fluents_ folder
-
-## Results :memo:
+## Problem 2
 
 ### Solutions found
 
@@ -297,22 +401,6 @@ Using `planner.domains` planner.
 ```
 
 # Problem 3
-
-### Machine setup:
-
-- HTN Planner: PANDA
-  
-  - Available at:
-    - [Resource](https://www.uni-ulm.de/fileadmin/website_uni_ulm/iui.inst.090/panda/PANDA.jar) from the official website;
-    - [PANDA.jar](PANDA.jar) file inside this folder.
-- Command line ``java -jar PANDA.jar -parser hddl domain.hddl problem.hddl``
-  
-- Run on Docker image ``docker pull openjdk:8u342-jre``
-  
-  > (why version 8? the authors recommend version 8 to build the planner. Reference https://github.com/galvusdamor/panda3core)
-  
-
-## Results :memo:
 
 ### Solution found
 
@@ -487,23 +575,6 @@ deliver[robot1,location1,per1,tools1,box1]
 
 # Problem 4
 
-### Machine setup:
-
-1. Planner: tfd
-  
-  - Command line ``tfd domain.pddl problem.pddl``
-  - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
-2. Planner: OPTIC
-  
-  - Command line: ``optic domain.pddl problem.pddl``
-  - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
-  - Move to _no_negative_preconditions_ folder to use it
-  
-  > OPTIC does not support :negative-preconditions
-  
-
-## Results :memo:
-
 ### Solution found
 
 #### lama
@@ -606,12 +677,6 @@ deliver[robot1,location1,per1,tools1,box1]
 ```
 
 # Problem 5
-
-### Machine setup:
-
-_Please, refer to [setup](../setup.md) instructions._
-
-## Results :memo:
 
 ### Solution found
 
