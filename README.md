@@ -37,7 +37,6 @@ Created with `tree /F` command
 │   APTP_report.pdf
 │   assignment.pdf
 │   README.md
-│   total_results.pdf
 │
 ├───problem1
 │       domain.pddl
