@@ -1,21 +1,20 @@
-; NOTE
-; esecuzione di task in parallelo non ne vedo... si può pensare di farlo se si hanno
-; due robot che lavorano contemporaneamente...
-; In general, the parallel execution of actions is possible when they involve different entities 
-; (robotic agents, carriers, boxes, etc.) and there's no overlap in the preconditions and effects of the actions.
-
-; NOTE IMPORTANTI
-; non supporta either, cambio con estensione di tutti i possibili predicati
-; non supporta il formato suggerito dall extension PDDL, bisogna scrivere le conditions una alla volta con at start at and ecc.. come specificato sulla documentazione https://planning.wiki/ref/pddl21/domain#durative-actions
-; optic planner non supporta i not nelle preconditions, mentre tfd si
-; i planners accettano numeric fluent, semplifica di mooolto la cosa
+; -------------------------------------------------------------------------------------------------------------------------------------
+; We had to rewrite the either in predicates because it is not supported by the planners tested
+; Write the condition one at time, as described in the official documentation https://planning.wiki/ref/pddl21/domain#durative-actions
+; OPTIC planner does not support :negative-preconditions. Please refer to the no_negative_preconditions folder for the modified version
+; These planners supports :numeric-fluents, that's why we rewrite the domain and the problem to take advantage of it
+; -------------------------------------------------------------------------------------------------------------------------------------
 
 (define (domain domain4)
     (:requirements :strips :typing :durative-actions :equality :negative-preconditions :numeric-fluents)
+
+    ; --- TYPES ---
     (:types
         person robotic_agent location box carrier supply - object
         food medicine tools - supply
     )
+
+    ; --- PREDICATES ---
     (:predicates
         (located_at_robot ?r - robotic_agent ?l - location)
         (located_at_box ?b - box ?l - location)
@@ -35,17 +34,20 @@
 
         (delivery_OR_refactored ?p1 ?p2 - person ?food1 ?food2 - food)
     )
+
+    ; --- FUNCTIONS ---
     (:functions
         (num_boxes ?c - carrier)
     )
 
+    ; --- DURATIVE ACTIONS ---
     ; move the robot
     (:durative-action move_robot
         :parameters (?r - robotic_agent ?l1 ?l2 - location)
         :duration (= ?duration 5)
         :condition (and 
                         (at start (located_at_robot ?r ?l1))
-                        (over all (robot_has_no_carrier ?r)) ; does not change along the duration
+                        (over all (robot_has_no_carrier ?r))
                         (over all (not (= ?l1 ?l2)))
         )
         :effect (and 
@@ -79,7 +81,7 @@
         :condition (and 
                         (at start (carrier_has_no_robot ?c)) 
                         (at start (robot_has_no_carrier ?r))
-                        (over all (= (num_boxes ?c) 0)) ; assumption that the carrier is initially empty or is cleaned from all boxes by external agents
+                        (over all (= (num_boxes ?c) 0)) ; assumption that the carrier is initially empty or is cleaned from all boxes by external actors
                         (over all (located_at_robot ?r ?l1)) 
                         (over all (located_at_carrier ?c ?l1))
         )
@@ -117,7 +119,6 @@
                         (at start (< (num_boxes ?c) 4))
                         (over all (located_at_carrier ?c ?l))
                         (over all (located_at_robot ?r ?l))
-                        ; (over all (not (box_is_empty ?b)))
         )
         :effect (and 
                     (at start (not (located_at_box ?b ?l)))
@@ -145,8 +146,8 @@
         )
     )
 
-    ; fill the box with a supply
-    (:durative-action fill_box ; box is required to not be on a carrier to be filled
+    ; fill the box with a supply. The box is required to not be on a carrier to be filled
+    (:durative-action fill_box
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply)
         :duration (= ?duration 4)
         :condition (and 
@@ -164,7 +165,8 @@
         )
     )
     
-    (:durative-action deliver ; box is required to not be on a carrier to have its supply delivered
+    ; deliver the supply to the person. The box is required to not be on a carrier to have its supply delivered
+    (:durative-action deliver
         :parameters (?r - robotic_agent ?l1 - location ?p - person ?s - supply ?b - box)
         :duration (= ?duration 3)
         :condition (and 
@@ -182,12 +184,15 @@
         )
     )
 
-    ;; actions needed for the unsupported ":disjunctive-preconditions" of the planners tested
+    ; --- DUMMY DURATIVE ACTIONS ---
+    ; they are dummy/virtual actions that don't represent any real-world task or activity
+    ; actions needed for the unsupported ":disjunctive-preconditions" of the planners tested
+    ; it is important to add a very small duration action otherwise it does not appear in the final plan
+    
     (:durative-action delivery_OR_refactored_possible_action1
         :parameters (?p1 ?p2 - person ?food1 ?food2 - food)
-        :duration (= ?duration 0.1) ; instantaneous action, 
-        ; it is a dummy/virtual action that don't represent any real-world task or activity
-        ; need to add a very small duration action otherwise it does not appear on the final plan
+        :duration (= ?duration 0.1) ; instantaneous action
+        
         :condition (and 
                         (at start (delivered ?p1 ?food1))
                         (at start (delivered ?p2 ?food2))

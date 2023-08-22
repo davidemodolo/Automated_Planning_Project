@@ -1,7 +1,7 @@
-; NOTE IMPORTANTI
-; da numeric-fluents a fluents
-; equality non accettato dal planner, rimossi
-; non acetta negative-prenconditions, fixato
+; ----------------------------------------------------------------------
+; from :numeric-fluents to :fluents
+; rewrite the domain and problem to avoid using :negative-prenconditions
+; ----------------------------------------------------------------------
 
 (define (domain domain4)
     (:requirements :strips :typing :adl :fluents :durative-actions)
@@ -41,7 +41,7 @@
         :duration (= ?duration 5)
         :condition (and 
                         (at start (located_at_robot ?r ?l1))
-                        (over all (robot_has_no_carrier ?r)) ; does not change along the duration
+                        (over all (robot_has_no_carrier ?r))
                         ; (at start (not(located_at_robot ?r ?l2)))
         )
         :effect (and 
@@ -74,7 +74,7 @@
         :condition (and 
                         (at start (carrier_has_no_robot ?c)) 
                         (at start (robot_has_no_carrier ?r))
-                        (over all (= (num_boxes ?c) 0)) ; assumption that the carrier is initially empty or is cleaned from all boxes by external agents
+                        (over all (= (num_boxes ?c) 0)) ; assumption that the carrier is initially empty or is cleaned from all boxes by external actors
                         (over all (located_at_robot ?r ?l1)) 
                         (over all (located_at_carrier ?c ?l1))
         )

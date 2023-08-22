@@ -1,18 +1,27 @@
 # Problem 4
-## Results
 
 ### Machine setup:
-- Planner: tfd
-- Command line ``tfd domain.pddl problem.pddl``
-- Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
-> We tried also optic but it does not support negative-preconditions. Please use the domain and problem inside no_negative_preconditions to use different planners.
+1. Planner: tfd
+    - Command line ``tfd domain.pddl problem.pddl``
+    - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
+2. Planner: OPTIC
+    - Command line: ``optic domain.pddl problem.pddl``
+    - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
+    - Move to _no_negative_preconditions_ folder to use it
+    > OPTIC does not support :negative-preconditions
+
+
+## Results :memo:
 
 ### Solution found 
+
+#### lama
 
 > Plan length: 26 steps. 
 
 > Sub-optimal solution because, if we apply the condition to not load a box that has been already used for delivery, the final plan is 25 steps long. But using the latter case broke the extra problem because we do not give the possibility to reuse the boxes.
 
+```bash
 - 0.00100000: (attach_carrier_to_robot robot1 depot carrier1) [2.00000000]
 - 2.01100000: (fill_box robot1 depot box4 med1) [4.00000000]
 - 6.02100000: (load_box_on_carrier carrier1 box4 depot robot1) [3.00000000]
@@ -39,13 +48,13 @@
 - 89.23100000: (move_robot_with_carrier robot1 carrier1 location3 location2) [7.00000000]
 - 96.24100000: (deliver robot1 location2 per2 food2 box1) [3.00000000]
 - 99.25100000: (delivery_or_refactored_possible_action2 per2 per3 food1 food2) [0.10000000]
+```
 
-### Extra w/ 3 Boxes
-
-Command line ``tfd domain.pddl problemExtra_3boxes.pddl``
+#### extra with 3 boxes using tfd planner
 
 > Plan length: 27 steps. 
 
+```bash
 - 0.00100000: (attach_carrier_to_robot robot1 depot carrier1) [2.00000000]
 - 2.01100000: (fill_box robot1 depot box2 food1) [4.00000000]
 - 6.02100000: (load_box_on_carrier carrier1 box2 depot robot1) [3.00000000]
@@ -73,13 +82,13 @@ Command line ``tfd domain.pddl problemExtra_3boxes.pddl``
 - 99.24100000: (move_robot_with_carrier robot1 carrier1 depot location1) [7.00000000]
 - 106.25100000: (unload_box_from_carrier carrier1 box1 location1 robot1) [3.00000000]
 - 109.26100000: (deliver robot1 location1 per1 tools1 box1) [3.00000000]
+```
 
-### No Negative Preconditions
-
-Command line ``optics domain_no_negative.pddl problem_no_negative.pddl``
+#### without negative preconditions
 
 > Plan length: 27 steps. 
 
+```bash
 - 0.000: (attach_carrier_to_robot robot1 depot carrier1)  [2.000]
 - 2.001: (fill_box robot1 depot box1 food2 carrier1)  [4.000]
 - 6.002: (load_box_on_carrier carrier1 box1 depot robot1)  [3.000]
@@ -103,3 +112,4 @@ Command line ``optics domain_no_negative.pddl problem_no_negative.pddl``
 - 64.004: (deliver robot1 location1 per1 med1 box4)  [3.000]
 - 64.004: (deliver robot1 location1 per1 tools1 box3)  [3.000]
 - 66.904: (delivery_or_refactored_possible_action1 per2 per3 food1 food2)  [0.100]
+```
