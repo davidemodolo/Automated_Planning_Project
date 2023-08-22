@@ -1,9 +1,17 @@
-# PlanSys2 Problem5
-## Solution found 
+# Problem 5
+
+### Machine setup:
+_Please, refer to [setup](../setup.md) instructions._
+
+## Results :memo:
+
+### Solution found 
+
+#### POPF planner output
 
 > Plan length: 25 steps. 
 
-### POPF output
+```bash
 - 0:      (attach_carrier_to_robot robot1 depot carrier1) [2]
 - 2.001:  (fill_box robot1 depot box1 food1 carrier1)     [4]
 - 6.002:  (load_box_on_carrier carrier1 box1 depot robot1)        [3]
@@ -29,8 +37,11 @@
 - 81.002: (move_robot_with_carrier robot1 carrier1 depot location1)       [7]
 - 88.002: (unload_box_from_carrier carrier1 box4 location1 robot1)        [3]
 - 88.002: (deliver robot1 location1 per1 tools1 box4)     [3]
+```
 
-### PlanSys execution
+#### PlanSys execution
+
+```bash
 - Attaching carrier to robot ... [100%]  
 - Filling box ... [100%]  
 - Loading box ... [100%]  
@@ -56,3 +67,4 @@
 - Moving robot with carrier ... [100%]  
 - Unloading box ... [100%]  
 - Delivering to person ... [100%] 
+```
