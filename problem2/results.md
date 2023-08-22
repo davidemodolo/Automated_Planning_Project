@@ -1,13 +1,18 @@
 # Problem 2
-## Results
 
 ### Machine setup:
-- Planner: LAMA
-- Command line ``lama domain.pddl problem.pddl``
-- Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
+1. Planner: LAMA
+    - Command line ``lama domain.pddl problem.pddl``
+    - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
+2. Planner: online solver
+    - Command line: ``python runnerSolverAPI.py``
+    - Python is required. To run it move to _numeric_fluents_ folder
 
-### Solution found 
+## Results :memo:
 
+### Solutions found 
+
+#### lama
 > Plan length: 20 steps.
 
 ```bash
@@ -33,9 +38,7 @@
 20. deliver robot1 location3 per3 food1 box4 (1)
 ```
 
-### Extra w/ 3 boxes
-
-With `lama` planner.
+#### extra with 3 boxes using lama planner
 
 > Plan length: 23 steps.
 
@@ -65,7 +68,7 @@ With `lama` planner.
 23. deliver robot1 location3 per3 food2 box2 (1)
 ```
 
-### Numeric Fluents
+#### numeric fluents
 
 Using `planner.domains` planner.
 

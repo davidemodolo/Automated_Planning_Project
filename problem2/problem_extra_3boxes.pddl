@@ -1,3 +1,7 @@
+; -----------------------------------------------------------------------------------------
+; an extra problem to see what the planner returns as plan with at disposition only 3 boxes
+; -----------------------------------------------------------------------------------------
+
 (define (problem problem2-extra)
     (:domain domain2)
 
@@ -13,10 +17,12 @@
     )
 
     (:init
-        (located_at robot1 depot)
+        ; initial locations of people
         (located_at per1 location1)
         (located_at per2 location2)
         (located_at per3 location3)
+        ; depot is the initial location of the robot and the supplies
+        (located_at robot1 depot)
         (located_at box1 depot)
         (located_at box2 depot)
         (located_at box3 depot)
@@ -25,6 +31,7 @@
         (located_at food2 depot)
         (located_at tools1 depot)
         (located_at carrier1 depot)
+        ; initial state of objects
         (carrier_has_no_robot carrier1)
         (carrier_has_no_boxes carrier1) ; assumption that the carrier is initially empty
         (robot_has_no_carrier robot1)

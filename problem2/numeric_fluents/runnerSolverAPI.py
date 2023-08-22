@@ -5,7 +5,6 @@ def resolveWithAPI(domain, problem):
             'problem': problem}
         resp = requests.post('http://solver.planning.domains/solve',
                  verify=False, json=data).json()
-        # return '\n'.join([act['name'] for act in resp['result']['plan']])
         try:
             return '\n'.join([act['name'] for act in resp['result']['plan']])
         except:

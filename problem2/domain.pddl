@@ -1,18 +1,25 @@
 (define (domain domain2)
     (:requirements :strips :typing :equality :negative-preconditions :disjunctive-preconditions :conditional-effects :existential-preconditions :universal-preconditions)
+
+    ; --- TYPES ---
     (:types
         person robotic_agent location box carrier supply - object
         food medicine tools - supply
     )
+
+    ; --- PREDICATES ---
     (:predicates
         (located_at ?x - (either robotic_agent box supply person carrier) ?l - location)
+
         (box_on_carrier ?b - box ?c - carrier)
         (box_loaded ?b - box)
         (box_is_empty ?b - box)
         (box_with_supply ?b - box ?s - supply)
+
         (carrier_has_no_robot ?c - carrier)
         (robot_has_no_carrier ?r - robotic_agent)
         (robot_carrier_attached ?r - robotic_agent ?c - carrier)
+
         ; since a carrier can load only up to 4 boxes, we create all the predicates
         ; because :numeric-fluents is not fully supported in many PDDL solvers (we tested using LAMA and other planners)
         (carrier_has_no_boxes ?c - carrier)
@@ -20,9 +27,11 @@
         (carrier_has_two_boxes ?c - carrier)
         (carrier_has_three_boxes ?c - carrier)
         (carrier_has_four_boxes ?c - carrier)
+
         (delivered ?p - person ?s - supply)
     )
 
+    ; --- ACTIONS ---
     ; move the robot
     (:action move_robot
         :parameters (?r - robotic_agent ?l1 ?l2 - location)
@@ -64,6 +73,7 @@
         :effect (and (carrier_has_no_robot ?c) (robot_has_no_carrier ?r) (not (robot_carrier_attached ?r ?c)))
     )
 
+    ; load the box on carrier under certain preconditions
     (:action load_box_on_carrier
         :parameters (?c - carrier ?b - box ?l - location ?r - robotic_agent)
         :precondition (and
@@ -72,18 +82,18 @@
             (located_at ?r ?l)
             (not (box_loaded ?b))
             (not (box_on_carrier ?b ?c))
-            ; (not (box_is_empty ?b))
             (or 
                 (carrier_has_no_boxes ?c)
                 (carrier_has_one_box ?c)
                 (carrier_has_two_boxes ?c)
-                (carrier_has_three_boxes ?c)) ; if (carrier_has_four_boxes ?c) == TRUE, means we reach max of boxes to load, no more boxes can be loaded
+                (carrier_has_three_boxes ?c)) 
+                ; if (carrier_has_four_boxes ?c) == TRUE, means we reach max of boxes to load, thus no more boxes can be loaded
         )
         :effect (and
             (box_on_carrier ?b ?c)
             (box_loaded ?b)
             (not (located_at ?b ?l))
-            (when (carrier_has_no_boxes ?c) ; all this when conditions are used similarly to if-else statements
+            (when (carrier_has_no_boxes ?c) ; :conditional-effects required. when usage helps to simplify the understanding
                 (and
                     (not (carrier_has_no_boxes ?c))
                     (carrier_has_one_box ?c)))
@@ -102,6 +112,7 @@
         )
     )
 
+    ; unload a box from the carrier
     (:action unload_box_from_carrier
         :parameters (?c - carrier ?b - box ?l - location ?r - robotic_agent)
         :precondition (and 
@@ -119,7 +130,7 @@
             (not (box_on_carrier ?b ?c))
             (not (box_loaded ?b))
             (located_at ?b ?l)
-            (when (carrier_has_one_box ?c)
+            (when (carrier_has_one_box ?c) ; same usage here
                 (and
                     (not (carrier_has_one_box ?c))
                     (carrier_has_no_boxes ?c)))
@@ -138,13 +149,15 @@
         )
     )
 
-    (:action fill_box ; box is required to not be on a carrier to be filled
+    ; fill the box with a supply. The box is required to not be on a carrier to be filled
+    (:action fill_box
         :parameters (?r - robotic_agent ?l1 - location ?b - box ?s - supply)
         :precondition (and (located_at ?r ?l1) (located_at ?s ?l1) (box_is_empty ?b) (located_at ?b ?l1) (not (box_loaded ?b)))
         :effect (and (not (located_at ?s ?l1)) (box_with_supply ?b ?s) (not (box_is_empty ?b)))
     )
 
-    (:action deliver ; box is required to not be on a carrier to have its supply delivered
+    ; deliver the supply to the person. The box is required to not be on a carrier to have its supply delivered
+    (:action deliver
         :parameters (?r - robotic_agent ?l1 - location ?p - person ?s - supply ?b - box)
         :precondition (and (located_at ?r ?l1) (located_at ?p ?l1) (located_at ?b ?l1) (box_with_supply ?b ?s) (not (box_is_empty ?b)) (not (box_loaded ?b)))
         :effect (and (not (box_with_supply ?b ?s)) (delivered ?p ?s) (box_is_empty ?b))
