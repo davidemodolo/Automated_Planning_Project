@@ -46,11 +46,11 @@ To summarize:
 - Problem 1
   - Objective: Develop a structure using PDDL.
   - Focus: A robot delivers essential items to the injured.
-  - Tools: Planutils.
+  - Tool: Planutils.
 
 - Problem 2
   - Objective: Builds on top of Problem 1 with some extesions for efficient transport.
-  - Tools: Planutils.
+  - Tool: Planutils.
   - Versions: 2 (with and without `:numeric-fluents`)
 
 - Problem 3
@@ -61,12 +61,12 @@ To summarize:
 - Problem 4
   - Objective: Builds on top of Problem 2, integrating durative actions.
   - Details: Assigns durations and time constraints to actions. Goal is to minimize time.
-  - Tools: Planutils.
+  - Tool: Planutils.
   - Versions: 2 (with and without `:negative-preconditions`)
 
 - Problem 5
   - Objective: Implementing Problem 4 within PlanSys using fake actions.
-  - Tools: ROS2 & PlanSys2.
+  - Tool: ROS2 & PlanSys2.
 
 Some assumptions has been made, please refer to the assignment and our report. The full assignment is available [here](assignment.pdf).
 
@@ -78,7 +78,7 @@ This repository has been structured to accomplish the contents requested for the
 - Folder [plansys_problem5](problem5/plansys_problem5) contains all the code to execute the PlanSys2 problem;
 - PDF report;
 
-Others files has been added for completeness.
+Other files have been added for completeness.
 
 Below we report the full structure of this repo. Created with `tree /F` command
 
@@ -187,16 +187,15 @@ In every problem folder we provide a markdown with the same information collecte
   - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
 2. Planner: online solver
   - Command line: ``python runnerSolverAPI.py``
-  - Python is required. To run it move to _numeric_fluents_ folder
+  - Python is required. To run it move to [problem2/numeric_fluents](problem2/numeric_fluents) folder
 
 ## Problem 3
 ### Machine setup:
 
 - HTN Planner: PANDA
-  
   - Available at:
     - [Resource](https://www.uni-ulm.de/fileadmin/website_uni_ulm/iui.inst.090/panda/PANDA.jar) from the official website;
-    - [PANDA.jar](PANDA.jar) file inside this folder.
+    - [PANDA.jar](problem3/PANDA.jar) file.
 - Command line ``java -jar PANDA.jar -parser hddl domain.hddl problem.hddl``
   
 - Run on Docker image ``docker pull openjdk:8u342-jre``
@@ -214,14 +213,14 @@ In every problem folder we provide a markdown with the same information collecte
   
   - Command line: ``optic domain.pddl problem.pddl``
   - Run on Docker image from https://hub.docker.com/r/aiplanning/planutils
-  - Move to _no_negative_preconditions_ folder to use it
+  - Move to [problem4/no_negative_preconditions](problem4/no_negative_preconditions) folder to use it
   
   > OPTIC does not support :negative-preconditions
 
 ## Problem 5
 ### How to build and run the Docker image
 
-1. Navigate to this folder with the terminal
+1. Move to folder [problem5](problem5) ``cd problem5``
 2. Run ``docker build --rm  --tag ros-humble . --file Dockerfile``
 3. Run ``docker run -it --name ros ros-humble bash``
 
@@ -231,14 +230,14 @@ Two terminals of the same Docker container are needed.
 > The steps provided are an adapted version of the ones provided by the official page https://plansys2.github.io/tutorials/docs/simple_example.html
 
 #### Terminal 1
-1. Go to folder problem5 ``cd problem5``
+1. Move to folder [problem5/plansys_problem5](problem5/plansys_problem5) ``cd problem5/plansys_problem5``
 2. Compile and launch the repo by running ``bash launch_terminal1.sh``
 3. Wait until the terminal stops to print verbose
 
 #### Terminal 2 
-1. Go to folder problem5 ``cd problem5``
+1. Move to folder [problem5/plansys_problem5](problem5/plansys_problem5) ``cd problem5/plansys_problem5``
 2. Launch PlanSys2 terminal ``bash launch_terminal2.sh``. If you see a server error, please type ``quit`` and repeat this step
-3. When ROS started, run the command ``source /root/plansys2_problem5/launch/problem 1`` to add the problem - you may need to adjust the path and here you can change the problem... and don't forget the 1 at the end!
+3. When ROS started, run the command ``source /root/problem5/plansys2_problem5/launch/problem 1`` to add the problem - you may need to adjust the path and here you can change the problem... and don't forget the 1 at the end!
 4. Now you can inspect the goal, predicates, types... use ``help``to see the available commands
 5. Creates plan and shows it ``get plan`` to retrieve a valid plan to be executed. The default planner is POPF
 6. Creates plan and runs ``run`` to launch the plan! :rocket:
