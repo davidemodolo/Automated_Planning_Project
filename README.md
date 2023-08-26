@@ -569,7 +569,7 @@ deliver[robot1,location1,per1,tools1,box1]
 
 ### Solution found
 
-#### lama
+#### tfd
 
 > Plan length: 26 steps.
 
@@ -638,7 +638,7 @@ deliver[robot1,location1,per1,tools1,box1]
 - 109.26100000: (deliver robot1 location1 per1 tools1 box1) [3.00000000]
 ```
 
-#### without negative preconditions
+#### without negative preconditions using OPTIC
 
 > Plan length: 27 steps.
 
