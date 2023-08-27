@@ -5,7 +5,7 @@
 ; These planners supports :numeric-fluents, that's why we rewrite the domain and the problem to take advantage of it
 ; -------------------------------------------------------------------------------------------------------------------------------------
 
-(define (domain domain4)
+(define (domain domain4) 
     (:requirements :strips :typing :durative-actions :equality :negative-preconditions :numeric-fluents)
 
     ; --- TYPES ---
