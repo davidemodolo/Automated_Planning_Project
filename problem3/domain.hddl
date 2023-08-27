@@ -44,6 +44,12 @@
 
     ; --- TASKS ---
     ;; --- non-primitive tasks ---
+    (:task T_food_delivery_satisfied
+        :parameters (?p1 - person ?p2 - person ?s1 - supply ?s2 - supply)
+        :precondition ()
+        :effect ()
+    )
+    
     (:task T_deliver_supply
         :parameters (?p - person ?s - supply)
         :precondition ()
@@ -108,6 +114,30 @@
 
     ; --- METHODS ---
     ;; --- non-primitive methods ---
+    (:method M_food_delivery_satisfied_method1
+        :parameters (?p1 - person ?p2 - person ?s1 - supply ?s2 - supply)
+        :task (T_food_delivery_satisfied ?p1 ?p2 ?s1 ?s2)
+        :subtasks (and 
+            (task0 (T_deliver_supply ?p1 ?s1))
+            (task1 (T_deliver_supply ?p2 ?s2))
+        )
+        :ordering (and  
+            (task0 < task1)
+        )
+    )
+
+    (:method M_food_delivery_satisfied_method2
+        :parameters (?p1 - person ?p2 - person ?s1 - supply ?s2 - supply)
+        :task (T_food_delivery_satisfied ?p1 ?p2 ?s1 ?s2)
+        :subtasks (and 
+            (task0 (T_deliver_supply ?p1 ?s2))
+            (task1 (T_deliver_supply ?p2 ?s1))
+        )
+        :ordering (and  
+            (task0 < task1)
+        )
+    )
+    
     (:method M_deliver_supply_with_already_carrier
         :parameters(?r - robotic_agent ?l1 - location ?l2 - location ?b - box ?s - supply ?p - person ?c - carrier)
         :task (T_deliver_supply ?p ?s)

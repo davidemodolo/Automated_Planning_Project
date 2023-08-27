@@ -18,14 +18,12 @@
         :parameters()
         :subtasks (and  
             (task0 (T_deliver_supply per1 med1))
-            (task1 (T_deliver_supply per2 food1)) 
-            (task2 (T_deliver_supply per3 food2)) ; takes long time to find a plan
-            (task3 (T_deliver_supply per1 tools1)) ; takes long time to find a plan
+            (task1 (T_deliver_supply per1 tools1))
+            (task2 (T_food_delivery_satisfied per2 per3 food1 food2))
         )
         :ordering (and  
             (task0 < task1)
             (task1 < task2)
-            (task2 < task3)
 		)
     )
 
