@@ -7,11 +7,11 @@
 ; -------------------------------------------------------------------------------
 
 (define (domain domain3)
-    (:requirements :strips :typing :hierachie :disjunctive-preconditions)
+    (:requirements :strips :typing :hierachie)
 
     ; --- TYPES ---
     (:types
-        person robotic_agent location carrier box supply person - object
+        person robotic_agent location carrier box supply - object
         medicine tools food - supply
     )
 
