@@ -113,50 +113,35 @@ Below we report the full structure of this repo. Created with `tree /F` command
 │           domain.pddl
 │           problem.pddl
 │
-├───problem5
-│   │   Dockerfile
-│   │   setup.md
-│   │
-│   └───plansys_problem5
-│       │   CMakeLists.txt
-│       │   launch_terminal1.sh
-│       │   launch_terminal2.sh
-│       │   package.xml
-│       │   results.md
-│       │
-│       ├───launch
-│       │       plansys2_problem5_launch.py
-│       │       problem
-│       │
-│       ├───pddl
-│       │       domain.pddl
-│       │
-│       └───src
-│               attach_carrier_to_robot_action_node.cpp
-│               delivery_or_refactored_possible_action1_action_node.cpp
-│               delivery_or_refactored_possible_action2_action_node.cpp
-│               deliver_action_node.cpp
-│               detach_carrier_from_robot_action_node.cpp
-│               fill_box_action_node.cpp
-│               load_box_on_carrier_action_node.cpp
-│               move_robot_action_node.cpp
-│               move_robot_with_carrier_action_node.cpp
-│               unload_box_from_carrier_action_node.cpp
-│
-└───screenshots
-    │   prob1_lama.png
-    │   prob2_lama_3boxes.png
-    │   prob2_lama_4boxes.png
-    │   prob3_PANDA_actions.png
-    │   prob4_optics_no_negative.png
-    │   prob4_tfd_3boxes.png
-    │   prob4_tfd_4boxes.png
+└───problem5
+    │   Dockerfile
+    │   setup.md
     │
-    └───types
-            prob1_domain.png
-            prob1_problem.png
-            prob2_domain.png
-            prob2_problem.png
+    └───plansys_problem5
+        │   CMakeLists.txt
+        │   launch_terminal1.sh
+        │   launch_terminal2.sh
+        │   package.xml
+        │   results.md
+        │
+        ├───launch
+        │       plansys2_problem5_launch.py
+        │       problem
+        │
+        ├───pddl
+        │       domain.pddl
+        │
+        └───src
+                attach_carrier_to_robot_action_node.cpp
+                delivery_or_refactored_possible_action1_action_node.cpp
+                delivery_or_refactored_possible_action2_action_node.cpp
+                deliver_action_node.cpp
+                detach_carrier_from_robot_action_node.cpp
+                fill_box_action_node.cpp
+                load_box_on_carrier_action_node.cpp
+                move_robot_action_node.cpp
+                move_robot_with_carrier_action_node.cpp
+                unload_box_from_carrier_action_node.cpp
 ```
 # Installation and Run :hammer:
 In every problem folder we provide a markdown with the same information collected here.
@@ -235,7 +220,6 @@ Two terminals of the same Docker container are needed.
 6. Creates plan and runs ``run`` to launch the plan! :rocket:
 
 # Results :memo:
-In the [screenshots](screenshots) folder we provide the image version of the results reported in this section.
 ## Problem 1
 
 Both planners returned the same plan.

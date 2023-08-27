@@ -21,10 +21,10 @@
             (task1 (T_deliver_supply per1 tools1))
             (task2 (T_food_delivery_satisfied per2 per3 food1 food2))
         )
-        :ordering (and  
-            (task0 < task1)
-            (task1 < task2)
-		)
+        ; :ordering (and  
+        ;     (task0 < task1)
+        ;     (task1 < task2)
+		; )
     )
 
     ; --- INITIAL STATE ---
