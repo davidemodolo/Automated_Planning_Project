@@ -625,7 +625,7 @@ deliver[robot1,location3,per3,food1,box2]
 
 #### without negative preconditions using OPTIC
 
-> Plan length: 27 steps.
+> Plan length: 23 steps.
 
 ```bash
 - 0.000: (attach_carrier_to_robot robot1 depot carrier1)  [2.000]
