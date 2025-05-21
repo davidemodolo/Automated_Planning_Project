@@ -6,8 +6,8 @@
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54" alt="Python" height="25px">
-  <img src="https://raw.githubusercontent.com/davidemodolo/PDDL_SVG_Icons/c978884225eca6e5e887515b6db818f94ac3cd0a/pddl.svg" alt="PDDL" height="25px">
-  <img src="https://raw.githubusercontent.com/davidemodolo/PDDL_SVG_Icons/c978884225eca6e5e887515b6db818f94ac3cd0a/hddl.svg" alt="HDDL" height="25px">
+  <img src="https://raw.githubusercontent.com/davidemodolo/Automated_Planning_Project/refs/heads/master/icons/pddl.svg" alt="PDDL" height="25px">
+  <img src="https://raw.githubusercontent.com/davidemodolo/Automated_Planning_Project/refs/heads/master/icons/hddl.svg" alt="HDDL" height="25px">
   <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white" alt="docker" height="25px"/> </a> 
 </p>
 
